@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  db:
+    image: mysql
+    volumes:
+    - type: bind
+      source: ./db_data
+      target: /var/lib/mysql
+    ports:
+    - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
