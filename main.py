@@ -1,17 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
+from flask_migrate import Migrate
 from config import DevConfig
+from datetime import datetime
 
 # Init Flask application and app config
 app = Flask(__name__)
 app.config.from_object(DevConfig)
+
+# SQLAlchemy DB object
 db = SQLAlchemy(app)
 
+# Alembic migrate object
 migrate = Migrate(app, db)
-manager = Manager(app)
-manager.add_command("db", MigrateCommand)
 
 # Association tables many-to-many
 # Posts-to-Tags
@@ -25,7 +26,7 @@ tags = db.Table("post_tag",
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255))
+    username = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255))
     posts = db.relationship("Post", backref="users", lazy="dynamic")
 
@@ -40,9 +41,9 @@ class User(db.Model):
 class Post(db.Model):
     __tablename__ = "posts"
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
+    title = db.Column(db.String(255), nullable=False)
     text = db.Column(db.Text())
-    publish_date = db.Column(db.DateTime())
+    publish_date = db.Column(db.DateTime(), default=datetime.now)
     user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
     comments = db.relationship("Comment", backref="posts", lazy="dynamic")
     tags = db.relationship("Tag", secondary=tags, backref=db.backref("posts", lazy="dynamic"))
@@ -58,9 +59,9 @@ class Post(db.Model):
 class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(255))
+    name = db.Column(db.String(255), nullable=False)
     text = db.Column(db.Text())
-    data = db.Column(db.DateTime())
+    date = db.Column(db.DateTime(), default=datetime.now)
     post_id = db.Column(db.Integer(), db.ForeignKey("posts.id"))
 
     def __repr__(self):
@@ -71,7 +72,7 @@ class Comment(db.Model):
 class Tag(db.Model):
     __tablename__ = "tags"
     id = db.Column(db.Integer(), primary_key=True)
-    title = db.Column(db.String(255))
+    title = db.Column(db.String(255), nullable=False, unique=True)
 
     def __init__(self, title):
         self.title = title
