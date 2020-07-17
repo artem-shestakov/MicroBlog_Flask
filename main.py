@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import func, text
@@ -91,8 +91,17 @@ def sidebar_data():
 
 # Root route
 @app.route("/")
-def home():
-    return "<h1>Hello world</h1>"
+@app.route("/<int:page>")
+def home(page=1):
+    posts = Post.query.order_by(Post.publish_date.desc()).pagination(page, 10, False)
+    recent, top_tags = sidebar_data()
+    return render_template("home.html", posts=posts, recent=recent, top_tags=top_tags)
+
+
+@app.route("/post/<ind:post_id>")
+def get_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return post
 
 
 if __name__ == '__main__':

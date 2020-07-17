@@ -6,7 +6,7 @@ mysql_pass = os.getenv("MYSQL_ROOT_PASSWORD")
 
 
 class Config(object):
-    pass
+    POSTS_PER_PAGE = 10
 
 
 class ProdConfig(Config):
