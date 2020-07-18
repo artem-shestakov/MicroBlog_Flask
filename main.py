@@ -98,10 +98,20 @@ def home(page=1):
     return render_template("home.html", posts=posts, recent=recent, top_tags=top_tags)
 
 
-@app.route("/post/<ind:post_id>")
+# Route to post with ID post_id
+@app.route("/post/<int:post_id>")
 def get_post(post_id):
     post = Post.query.get_or_404(post_id)
     return post
+
+
+# Show posts by users
+@app.route("/posts_by_user/<string:username>")
+def post_by_user(username):
+    user = User.query.finter_by(username=username).first_or_404()
+    posts = user.posts.order_by(Post.publish_date.desc()).all()
+    recent, top_tags = sidebar_data()
+    return render_template("user.html", user=user, posts=posts, recent=recent, top_tags=top_tags)
 
 
 if __name__ == '__main__':
