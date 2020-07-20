@@ -93,7 +93,8 @@ def sidebar_data():
 @app.route("/")
 @app.route("/<int:page>")
 def home(page=1):
-    posts = Post.query.order_by(Post.publish_date.desc()).pagination(page, 10, False)
+    posts = Post.query.order_by(Post.publish_date.desc()).paginate(page, 10, False)
+    # posts = Post.query.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
     return render_template("home.html", posts=posts, recent=recent, top_tags=top_tags)
 
@@ -108,11 +109,26 @@ def get_post(post_id):
 # Show posts by users
 @app.route("/posts_by_user/<string:username>")
 def post_by_user(username):
-    user = User.query.finter_by(username=username).first_or_404()
+    user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
     return render_template("user.html", user=user, posts=posts, recent=recent, top_tags=top_tags)
 
+
+@app.route("/posts_by_tag/<string:tag_title>")
+def posts_by_tag(tag_title):
+    tag = Tag.query.filter_by(title=tag_title).first_or_404()
+    posts = tag.posts.order_by(Post.publish_date.desc()).all()
+    recent, top_tags = sidebar_data()
+    return render_template("tag.html", tag=tag, posts=posts, recent=recent, top_tags=top_tags)
+
+
+@app.route("/posts_by_users/<string:username>")
+def posts_by_user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = user.posts.order_by(Post.publish_date.desc()).all()
+    recent, top_tags = sidebar_data()
+    return render_template("use.html", user=user, posts=posts, recent=recent, top_tags=top_tags)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
