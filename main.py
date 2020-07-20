@@ -103,7 +103,8 @@ def home(page=1):
 @app.route("/post/<int:post_id>")
 def get_post(post_id):
     post = Post.query.get_or_404(post_id)
-    return post
+    recent, top_tags = sidebar_data()
+    return render_template("post.html", post=post, recent=recent, top_tags=top_tags)
 
 
 # Show posts by users
@@ -129,6 +130,7 @@ def posts_by_user(username):
     posts = user.posts.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
     return render_template("use.html", user=user, posts=posts, recent=recent, top_tags=top_tags)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
