@@ -31,8 +31,8 @@ class User(db.Model):
     password = db.Column(db.String(255))
     posts = db.relationship("Post", backref="users", lazy="dynamic")
 
-    def __init__(self, username):
-        self.username = username
+    # def __init__(self, username):
+    #     self.username = username
 
     def __repr__(self):
         return f"<User '{self.username}'>"
@@ -49,8 +49,8 @@ class Post(db.Model):
     comments = db.relationship("Comment", backref="posts", lazy="dynamic")
     tags = db.relationship("Tag", secondary=tags, backref=db.backref("posts", lazy="dynamic"))
 
-    def __init__(self, title):
-        self.title = title
+    # def __init__(self, title):
+    #     self.title = title
 
     def __repr__(self):
         return f"<Post '{self.title}'>"
@@ -75,8 +75,8 @@ class Tag(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
 
-    def __init__(self, title):
-        self.title = title
+    # def __init__(self, title):
+    #     self.title = title
 
     def __repr__(self):
         return f"<Tag '{self.title}'>"
