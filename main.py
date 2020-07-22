@@ -1,9 +1,12 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import func, text
 from config import DevConfig
 from datetime import datetime
+from flask_wtf import FlaskForm
+from wtforms import StringField, TextAreaField
+from wtforms.validators import DataRequired, Length
 
 # Init Flask application and app config
 app = Flask(__name__)
@@ -82,6 +85,13 @@ class Tag(db.Model):
         return f"<Tag '{self.title}'>"
 
 
+# Forms
+# Comment Form
+class CommentForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=255, message="")])
+    text = TextAreaField(u'Comment', validators=[DataRequired(message="This fild can't be empty")])
+
+
 # Functions
 def sidebar_data():
     recent = Post.query.order_by(Post.publish_date.desc()).limit(5).all()
@@ -94,17 +104,35 @@ def sidebar_data():
 @app.route("/<int:page>")
 def home(page=1):
     posts = Post.query.order_by(Post.publish_date.desc()).paginate(page, 10, False)
-    # posts = Post.query.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
     return render_template("home.html", posts=posts, recent=recent, top_tags=top_tags)
 
 
 # Route to post with ID post_id
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=("GET", "POST"))
 def get_post(post_id):
+    form = CommentForm()
+    if form.validate_on_submit():
+        new_comment = Comment()
+        new_comment.name = form.name.data
+        new_comment.text = form.text.data
+        new_comment.post_id = post_id
+        try:
+            db.session.add(new_comment)
+            db.session.commit()
+        except Exception as err:
+            print(f"Error adding comment {err}")
+            db.session.rollback()
+        else:
+            print("Comment added")
+        return redirect(url_for("get_post", post_id=post_id))
+
     post = Post.query.get_or_404(post_id)
+    tags = post.tags
+    comments = post.comments.order_by(Comment.date.desc()).all()
     recent, top_tags = sidebar_data()
-    return render_template("post.html", post=post, recent=recent, top_tags=top_tags)
+    return render_template("post.html", form=form, post=post, tags=tags, comments=comments, recent=recent,
+                           top_tags=top_tags)
 
 
 # Show posts by users
