@@ -160,5 +160,10 @@ def posts_by_user(username):
     return render_template("use.html", user=user, posts=posts, recent=recent, top_tags=top_tags)
 
 
+@app.errorhandler(404)
+def page_404(error):
+    return render_template('404.html'), 404
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
