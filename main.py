@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask.views import View
 from sqlalchemy import func, text
 from config import DevConfig
 from datetime import datetime
@@ -85,6 +86,28 @@ class Tag(db.Model):
         return f"<Tag '{self.title}'>"
 
 
+# Base class-view for view DB tables
+class TableView(View):
+    def __init__(self, model, template='home.html'):
+        self.model = model
+        self.template = template
+        self.columns = self.model.__mapper__.columns.keys()
+        super(TableView, self).__init__()
+
+    def render_template(self, context):
+        return render_template(self.template, **context)
+
+    def get_object(self):
+        return self.model.query.all()
+
+    def dispatch_request(self):
+        context = {
+            "objects": self.get_object(),
+            "columns": self.columns
+        }
+        return self.render_template(context)
+
+
 # Forms
 # Comment Form
 class CommentForm(FlaskForm):
@@ -157,7 +180,18 @@ def posts_by_user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
-    return render_template("use.html", user=user, posts=posts, recent=recent, top_tags=top_tags)
+    return render_template("user.html", user=user, posts=posts, recent=recent, top_tags=top_tags)
+
+
+app.add_url_rule(
+    "/admin/users", view_func=TableView.as_view("admin_users", model=User, template="table.html")
+)
+app.add_url_rule(
+    "/admin/tags", view_func=TableView.as_view("admin_tags", model=Tag, template="table.html")
+)
+app.add_url_rule(
+    "/admin/comments", view_func=TableView.as_view("admin_comments", model=Comment, template="table.html")
+)
 
 
 @app.errorhandler(404)
