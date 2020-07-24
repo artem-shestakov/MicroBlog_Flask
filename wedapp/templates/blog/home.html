@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+{% block title %}Home page{% endblock %}
+
+{% block leftbody %}
+{{ macros.render_post(posts) }}
+{% endblock %}
+
+{% block rightbody %}
+{{ macros.render_tops(recent, top_tags) }}
+{% endblock %}
+
+{% block pagination %}
+{{ macros.render_pagination(posts) }}
+{% endblock %}
