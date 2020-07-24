@@ -1,40 +1,19 @@
-from sqlalchemy import func, text
-from flask import Blueprint, render_template, current_app, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for
+from wedapp.main.utils import sidebar_data
 from .model import User, Post, Tag, Comment, tags, db
 from .forms import CommentForm
 
-
-blog_blueprint = Blueprint(
-    "blog",
+# Blueprint for posts
+posts_blueprint = Blueprint(
+    "posts",
     __name__,
-    template_folder="../templates/blog",
-    url_prefix="/blog",
+    template_folder="../templates/posts",
+    url_prefix="/post",
     static_folder="../static"
 )
 
 
-# Functions
-def sidebar_data():
-    recent = Post.query.order_by(Post.publish_date.desc()).limit(5).all()
-    top_tags = db.session.query(Tag, func.count(tags.c.post_id).label("total")).join(tags).group_by(Tag).order_by(text('total DESC')).limit(5).all()
-    return recent, top_tags
-
-
-@blog_blueprint.route("/")
-@blog_blueprint.route("/<int:page>")
-def home(page=1):
-    posts = Post.query.order_by(Post.publish_date.desc()).paginate(page, 10, False)
-    recent, top_tags = sidebar_data()
-
-    return render_template(
-        'home.html',
-        posts=posts,
-        recent=recent,
-        top_tags=top_tags
-    )
-
-
-@blog_blueprint.route('/post/<int:post_id>', methods=('GET', 'POST'))
+@posts_blueprint.route('/post/<int:post_id>', methods=('GET', 'POST'))
 def get_post(post_id):
     form = CommentForm()
 
@@ -51,7 +30,7 @@ def get_post(post_id):
             db.session.rollback()
         else:
             flash('Comment added', 'info')
-        return redirect(url_for('blog.get_post', post_id=post_id))
+        return redirect(url_for('posts.get_post', post_id=post_id))
 
     post = Post.query.get_or_404(post_id)
     tags = post.tags
@@ -69,7 +48,7 @@ def get_post(post_id):
     )
 
 
-@blog_blueprint.route('/tag/<string:tag_title>')
+@posts_blueprint.route('/tag/<string:tag_title>')
 def posts_by_tag(tag_title):
     tag = Tag.query.filter_by(title=tag_title).first_or_404()
     posts = tag.posts.order_by(Post.publish_date.desc()).all()
@@ -84,7 +63,7 @@ def posts_by_tag(tag_title):
     )
 
 
-@blog_blueprint.route('/user/<string:username>')
+@posts_blueprint.route('/user/<string:username>')
 def posts_by_user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.publish_date.desc()).all()
