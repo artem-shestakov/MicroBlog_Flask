@@ -3,12 +3,12 @@
 {% for post in posts.items %}
 <div>
     <h1>
-        <a href="{{ url_for('blog.get_post', post_id=post.id)}}">{{ post.title }}</a>
+        <a href="{{ url_for('posts.get_post', post_id=post.id)}}">{{ post.title }}</a>
     </h1>
     <div class="row">
         <div class="col">
             {{ post.text | truncate(500) | safe}}
-            <a href="{{ url_for('blog.get_post', post_id=post.id)}}">Read more</a>
+            <a href="{{ url_for('posts.get_post', post_id=post.id)}}">Read more</a>
         </div>
     </div>
 </div>
@@ -17,12 +17,12 @@
 {% for post in posts %}
 <div>
     <h1>
-        <a href="{{ url_for('blog.get_post', post_id=post.id)}}">{{ post.title }}</a>
+        <a href="{{ url_for('posts.get_post', post_id=post.id)}}">{{ post.title }}</a>
     </h1>
     <div class="row">
         <div class="col">
             {{ post.text | truncate(500) | safe}}
-            <a href="{{ url_for('blog.get_post', post_id=post.id)}}">Read more</a>
+            <a href="{{ url_for('posts.get_post', post_id=post.id)}}">Read more</a>
         </div>
     </div>
 </div>
@@ -36,7 +36,7 @@
     <ul>
     {% for post in recent %}
         <li>
-            <a href="{{ url_for('blog.get_post', post_id=post.id) }}">{{ post.title }}</a>
+            <a href="{{ url_for('posts.get_post', post_id=post.id) }}">{{ post.title }}</a>
         </li>
     {% endfor%}
     </ul>
@@ -46,7 +46,7 @@
     <ul>
     {% for tag in top_tags %}
         <li>
-            <a href="{{ url_for('blog.posts_by_tag', tag_title=tag[0].title)}}">{{ tag[0].title }}</a>
+            <a href="{{ url_for('posts.posts_by_tag', tag_title=tag[0].title)}}">{{ tag[0].title }}</a>
         </li>
     {% endfor %}
     </ul>
@@ -58,7 +58,7 @@
     <ul class="pagination justify-content-center">
         {% if pagination.has_prev %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('blog.home', page=pagination.prev().page)}}">Previous</a>
+                <a class="page-link" href="{{ url_for('main.home', page=pagination.prev().page)}}">Previous</a>
             </li>
         {% else %}
             <li class="page-item disabled">
@@ -75,14 +75,14 @@
         {% else %}
             </li>
             <li class="page-item">
-                <a class="page-link" href="{{url_for('blog.home', page=page)}}">{{ page }}</a>
+                <a class="page-link" href="{{url_for('main.home', page=page)}}">{{ page }}</a>
             </li>
         {% endif %}
         {% endfor %}
 
         {% if pagination.has_next %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('blog.home', page=pagination.next().page)}}">Next</a>
+                <a class="page-link" href="{{ url_for('main.home', page=pagination.next().page)}}">Next</a>
             </li>
         {% else %}
             <li class="page-item disabled">
