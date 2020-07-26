@@ -11,8 +11,9 @@ def page_404(error):
 
 
 def create_app(config_object):
-    from .posts.routes import posts_blueprint
-    from .main.routes import main_blueprint
+    from .main import create_module as main_create_module
+    from .posts import create_module as posts_create_module
+    from .auth import create_module as auth_create_module
 
     app = Flask(__name__)
     app.config.from_object(config_object)
@@ -20,8 +21,10 @@ def create_app(config_object):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    app.register_blueprint(posts_blueprint)
-    app.register_blueprint(main_blueprint)
+    main_create_module(app)
+    posts_create_module(app)
+    auth_create_module(app)
+
     app.register_error_handler(404, page_404)
 
     return app
