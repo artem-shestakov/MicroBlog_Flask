@@ -1,6 +1,6 @@
 from sqlalchemy import func, text
 from wedapp import db
-from wedapp.posts.model import Post, Tag, tags
+from wedapp.posts.models import Post, Tag, tags
 
 
 # Recent posts and top tags for right part of body page

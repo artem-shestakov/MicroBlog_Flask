@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, render_template
-from wedapp.posts.model import Post
+from wedapp.posts.models import Post
 from .utils import sidebar_data
 
 # Blueprint for main module
