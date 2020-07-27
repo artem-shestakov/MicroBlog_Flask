@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from wedapp.main.utils import sidebar_data
-from .models import User, Post, Tag, Comment, tags, db
+from .models import Post, Tag, Comment, tags, db
 from .forms import CommentForm
 
 # Blueprint for posts
