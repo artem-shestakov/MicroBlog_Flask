@@ -6,7 +6,7 @@
     <div class="col bg-light">
         <h1>{{ post.title }}</h1>
         <div>
-            {{ post.text }}
+            {{ post.text | safe }}
         </div>
     </div>
 </div>
@@ -57,11 +57,17 @@
                             <p class="help-block">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
-                    {{ form.text(class_='form-control') }}
+                    {{ form.text(id='editor', class_='form-control') }}
                 </div>
                 <input class="btn btn-primary" type="submit" value="Add comment">
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<script src="{{ url_for('static', filename='/js/ckeditor/ckeditor.js') }}"></script>
+<script>
+    CKEDITOR.replace('editor');
+</script>
 {% endblock %}

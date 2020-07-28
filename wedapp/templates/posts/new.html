@@ -10,7 +10,7 @@
                     {{ form.title.label }}
                     {% if form.title.error %}
                         {% for error in form.title.error %}
-                            <p class="help-block">{{ error }}</p>
+                            <p class="alert-warning">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
                     {{ form.title(class_='form-control')}}
@@ -19,13 +19,20 @@
                     {{ form.text.label }}
                     {% if form.text.error %}
                         {% for error in form.text.error %}
-                            <p class="help-block">{{ error }}</p>
+                            <p class="alert-warning">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
-                    {{ form.text(class_='form-control') }}
+                    {{ form.text(id='editor', class_='form-control') }}
                 </div>
                 <input class="btn btn-primary" type="submit" value="Publish post">
         </form>
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<!--<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>-->
+<script src="{{ url_for('static', filename='/js/ckeditor/ckeditor.js') }}"></script>
+<script>
+    CKEDITOR.replace('editor');
+</script>
 {% endblock %}
