@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
+from flask_login import login_required, current_user
 from wedapp.main.utils import sidebar_data
 from .models import Post, Tag, Comment, tags, db
-from .forms import CommentForm
+from wedapp.auth.models import User
+from .forms import CommentForm, PostForm
 
 # Blueprint for posts
 posts_blueprint = Blueprint(
@@ -16,7 +18,6 @@ posts_blueprint = Blueprint(
 @posts_blueprint.route('/post/<int:post_id>', methods=('GET', 'POST'))
 def get_post(post_id):
     form = CommentForm()
-
     if form.validate_on_submit():
         new_comment = Comment()
         new_comment.name = form.name.data
@@ -46,6 +47,22 @@ def get_post(post_id):
         top_tags=top_tags,
         form=form
     )
+
+
+@posts_blueprint.route("/new", methods=("GET", "POST"))
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        new_post = Post()
+        new_post.title = form.title.data
+        new_post.text = form.text.data
+        new_post.user_id = current_user.id
+        db.session.add(new_post)
+        db.session.commit()
+        flash("New post added", category="info")
+        return redirect(url_for(".get_post", post_id=new_post.id))
+    return render_template("new.html", form=form)
 
 
 @posts_blueprint.route('/tag/<string:tag_title>')
