@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
+from datetime import datetime
 from wedapp.main.utils import sidebar_data
 from .models import Post, Tag, Comment, tags, db
 from wedapp.auth.models import User
@@ -63,6 +64,25 @@ def new_post():
         flash("New post added", category="info")
         return redirect(url_for(".get_post", post_id=new_post.id))
     return render_template("new.html", form=form)
+
+
+@posts_blueprint.route("/edit/<int:post_id>", methods=("GET", "POST"))
+@login_required
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.user_id == current_user.id:
+        form = PostForm()
+        if form.validate_on_submit():
+            post.title = form.title.data
+            post.text = form.text.data
+            post.publish_date = datetime.now()
+            db.session.merge(post)
+            db.session.commit()
+            return redirect(url_for(".get_post", post_id=post.id))
+        form.title.data = post.title
+        form.text.data = post.text
+        return render_template("edit.html", form=form, post=post)
+    abort(403)
 
 
 @posts_blueprint.route('/tag/<string:tag_title>')
