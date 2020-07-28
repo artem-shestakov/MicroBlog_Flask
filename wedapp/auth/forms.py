@@ -7,13 +7,14 @@ from .models import User
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), Length(max=255)])
     password = PasswordField("Password", validators=[DataRequired()])
+    remember_me = BooleanField("Remember me")
 
     def validate(self):
         check_validate = super(LoginForm, self).validate()
         if not check_validate:
             return False
 
-        user = User.query.filter_by(username=self.username.data()).firts()
+        user = User.query.filter_by(username=self.username.data).first()
         if not user:
             self.username.errors.append("Invalid username")
             return False

@@ -2,9 +2,27 @@
     <a class="navbar-brand" href="{{ url_for('main.home', page=1) }}">Web Blog</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
+            <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('main.home', page=1) }}">Home <span class="sr-only">(current)</span></a>
-              </li>
+            </li>
         </ul>
+        <ul class="navbar-nav justify-content-end">
+        {% if current_user.is_authenticated %}
+            <li class="nav-item">
+                <span class="navbar-text">Hello {{ current_user.username }}</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.registration') }}">Registration</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.login')}}">Login</a>
+            </li>
+        {% endif %}
+            </ul>
+
     </div>
 </nav>
