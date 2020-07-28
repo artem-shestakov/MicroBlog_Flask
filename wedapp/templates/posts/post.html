@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
+{% import 'macros.html' as macros %}
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block leftbody %}
 <div class="row">
     <div class="col bg-light">
-        <h1>{{ post.title }}</h1>
+        <div class="row">
+            <h1>{{ post.title }}</h1>
+        </div>
         <div>
             {{ post.text | safe }}
         </div>
+        <a class="btn btn-outline-warning" role="button" aria-pressed="true" href="{{ url_for('.edit_post', post_id=post.id) }}">Edit</a>
     </div>
 </div>
 <div class="p-4 shadow-sm">
@@ -65,6 +69,11 @@
     </div>
 </div>
 {% endblock %}
+
+{% block rightbody %}
+{{ macros.render_tops(recent, top_tags) }}
+{% endblock %}
+
 {% block js %}
 <script src="{{ url_for('static', filename='/js/ckeditor/ckeditor.js') }}"></script>
 <script>
