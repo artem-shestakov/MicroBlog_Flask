@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, abort
+from flask import Blueprint, render_template, flash, redirect, url_for, abort, current_app
 from flask_login import login_required, current_user
 from datetime import datetime
 from wedapp.main.utils import sidebar_data
@@ -14,6 +14,12 @@ posts_blueprint = Blueprint(
     url_prefix="/post",
     static_folder="../static"
 )
+
+
+@posts_blueprint.app_errorhandler(404)
+def page_not_found(error):
+    """ Return error 404 """
+    return render_template('404.html'), 404
 
 
 @posts_blueprint.route('/post/<int:post_id>', methods=('GET', 'POST'))
@@ -39,15 +45,8 @@ def get_post(post_id):
     comments = post.comments.order_by(Comment.date.desc()).all()
     recent, top_tags = sidebar_data()
 
-    return render_template(
-        'post.html',
-        post=post,
-        tags=tags,
-        comments=comments,
-        recent=recent,
-        top_tags=top_tags,
-        form=form
-    )
+    return render_template('post.html', post=post, tags=tags, comments=comments, recent=recent, top_tags=top_tags,
+                           form=form)
 
 
 @posts_blueprint.route("/new", methods=("GET", "POST"))
