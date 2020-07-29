@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% import 'macros.html' as macros %}
-{% block title %}Home page{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block leftbody %}
 {{ macros.render_post(posts) }}
