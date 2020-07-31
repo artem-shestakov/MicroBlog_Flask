@@ -10,3 +10,9 @@ services:
     - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  app:
+    build:
+      context: .
+    ports:
+    - "80:5000"
+
