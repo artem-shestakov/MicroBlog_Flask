@@ -1,6 +1,8 @@
 from flask_login import LoginManager, AnonymousUserMixin
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
+from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+
 
 # Create LoginManager object
 login_manager = LoginManager()
@@ -28,5 +30,11 @@ def create_module(app, **kwargs):
     login_manager.init_app(app)
     bcrypt.init_app(app)
     openid.init_app(app)
+
+    twitter_blueprint = make_twitter_blueprint(
+        api_key=app.config.get("TWITTER_API_KEY"),
+        api_secret=app.config.get("TWITTER_API_SECRET")
+    )
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(twitter_blueprint, url_prefix="/auth/login")

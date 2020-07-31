@@ -1,6 +1,7 @@
 from flask import session, flash, redirect, url_for, g
 from flask_openid import OpenIDResponse
 from flask_login import login_user
+from flask_dance.consumer import oauth_authorized
 from wedapp import db
 from .models import User
 from . import openid
@@ -27,3 +28,20 @@ def create_or_login(resp: OpenIDResponse):
     g.user = user
     flash("You have been logged in.", category="success")
     return redirect(openid.get_next_url())
+
+
+@oauth_authorized.connect
+def logged_in(blueprint, token):
+    if blueprint.name == "twiter":
+        username = session.get("twitter_oauth_token").get("screen_name")
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        user = User(username=username)
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except Exception as err:
+            print(err)
+    login_user(user)
+    g.user = user
+    flash("You have been logged in.", category="success")
