@@ -1,5 +1,6 @@
 from flask_login import LoginManager, AnonymousUserMixin
 from flask_bcrypt import Bcrypt
+from flask_openid import OpenID
 
 # Create LoginManager object
 login_manager = LoginManager()
@@ -10,6 +11,9 @@ login_manager.login_message_category = "info"
 
 # Create Bcrypt object for hashing user's passwords
 bcrypt = Bcrypt()
+
+# Create OpenID object
+openid = OpenID()
 
 
 # Reload the user object from the user ID stored in the session
@@ -23,5 +27,6 @@ def load_user(userid):
 def create_module(app, **kwargs):
     login_manager.init_app(app)
     bcrypt.init_app(app)
+    openid.init_app(app)
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
