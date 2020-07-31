@@ -1,6 +1,7 @@
-from flask import Blueprint, redirect, render_template, url_for, flash
+from flask import Blueprint, redirect, render_template, url_for, flash, g
 from flask_login import login_user, logout_user, login_required
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, OpenIDForm
+from . import openid
 from .models import User
 from wedapp import db
 
@@ -22,15 +23,28 @@ def page_not_found(error):
 
 # Route to login form
 @auth_blueprint.route("/login", methods=('GET', "POST"))
+@openid.loginhandler
 def login():
     form = LoginForm()
+    openid_form = OpenIDForm()
+    # Validate data from OpenID
+    if openid_form.validate_on_submit():
+        return openid.try_login(openid_form.openid.data,
+                                ask_for=["nickname", "email"],
+                                ask_for_optional=["fullname"])
+
     # If get POST request from form
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).one()
         login_user(user, remember=form.remember_me.data)
         flash("You have been logged successfully", category="success")
         return redirect(url_for("main.home", page=1))
-    return render_template("login.html", form=form)
+
+    # Check OpenID errors
+    openid_errors = openid.fetch_error()
+    if openid_errors:
+        flash(openid_errors, category="danger")
+    return render_template("login.html", form=form, openid_form=openid_form)
 
 
 # Logout user and redirect to index page
@@ -44,8 +58,16 @@ def logout():
 
 # Registration page
 @auth_blueprint.route("/registration", methods=("GET", "POST"))
+@openid.loginhandler
 def registration():
     form = RegistrationForm()
+    openid_form = OpenIDForm()
+    # Validate data from OpenID
+    if openid_form.validate_on_submit():
+        return openid.try_login(openid_form.openid.data,
+                                ask_for=["username", "email"],
+                                ask_for_optional=["fullname"])
+
     # If POST request from form
     if form.validate_on_submit():
         new_user = User()
@@ -58,4 +80,7 @@ def registration():
             flash("Something went wrong, try later")
             redirect(url_for("main.home", page=1))
         return redirect(url_for(".login"))
+    openid_errors = openid.fetch_error()
+    if openid_errors:
+        flash(openid_errors, category="danger")
     return render_template("registration.html", form=form)

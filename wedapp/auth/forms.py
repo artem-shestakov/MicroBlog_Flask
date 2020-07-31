@@ -4,7 +4,17 @@ from wtforms.validators import DataRequired, Length, EqualTo, URL
 from .models import User
 
 
+class OpenIDForm(FlaskForm):
+    """
+    OpenID form.
+    """
+    openid = StringField("OpenID", validators=[DataRequired(), URL()])
+
+
 class LoginForm(FlaskForm):
+    """
+    Form for login user
+    """
     username = StringField("Username", validators=[DataRequired(), Length(max=255)])
     password = PasswordField("Password", validators=[DataRequired()])
     remember_me = BooleanField("Remember me")
@@ -29,8 +39,10 @@ class LoginForm(FlaskForm):
         return True
 
 
-# Form for registration
 class RegistrationForm(FlaskForm):
+    """
+    Form for registration
+    """
     username = StringField("Username", validators=[DataRequired(), Length(max=255)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField("Confirm password", validators=[DataRequired(), EqualTo("password")])
