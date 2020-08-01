@@ -1,9 +1,9 @@
-from flask import Blueprint, redirect, render_template, url_for, flash, g
+from flask import Blueprint, redirect, render_template, url_for, flash
 from flask_login import login_user, logout_user, login_required
 from .forms import RegistrationForm, LoginForm, OpenIDForm
 from . import openid
 from .models import User
-from wedapp import db
+from app.wedapp import db
 
 # Init Blueprint
 auth_blueprint = Blueprint(

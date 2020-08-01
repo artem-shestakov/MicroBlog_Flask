@@ -1,5 +1,5 @@
-from wedapp import db
-from wedapp.posts.models import User, Post, Tag
+from app.wedapp import db
+from app.wedapp.posts import User, Post, Tag
 import random
 from faker import Faker
 

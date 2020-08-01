@@ -2,7 +2,7 @@ from flask import session, flash, redirect, url_for, g
 from flask_openid import OpenIDResponse
 from flask_login import login_user
 from flask_dance.consumer import oauth_authorized
-from wedapp import db
+from app.wedapp import db
 from .models import User
 from . import openid
 

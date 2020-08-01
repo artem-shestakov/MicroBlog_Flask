@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, render_template, abort
-import pymysql, sqlalchemy
-from wedapp.posts.models import Post
+import sqlalchemy
+from app.wedapp.posts.models import Post
 from .utils import sidebar_data
 
 # Blueprint for main module

@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, abort, current_app
+from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 from datetime import datetime
-from wedapp.main.utils import sidebar_data
-from .models import Post, Tag, Comment, tags, db
-from wedapp.auth.models import User
+from app.wedapp.main.utils import sidebar_data
+from .models import Post, Tag, Comment, db
+from app.wedapp.auth.models import User
 from .forms import CommentForm, PostForm
 
 # Blueprint for posts

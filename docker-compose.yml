@@ -3,10 +3,14 @@ services:
   db:
     image: mysql
     volumes:
-    - type: bind
-      source: ./db_data
+    - type: volume
+      source: db_webblog
       target: /var/lib/mysql
     ports:
     - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+volumes:
+  db_webblog:
+
