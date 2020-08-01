@@ -2,6 +2,7 @@ from flask_login import LoginManager, AnonymousUserMixin
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 
 
 # Create LoginManager object
@@ -35,6 +36,13 @@ def create_module(app, **kwargs):
         api_key=app.config.get("TWITTER_API_KEY"),
         api_secret=app.config.get("TWITTER_API_SECRET")
     )
+
+    facebook_blueprint = make_facebook_blueprint(
+        client_id=app.config.get("FACEBOOK_CLIENT_ID"),
+        client_secret=app.config.get("FACEBOOK_CLIENT_SECRET")
+    )
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(twitter_blueprint, url_prefix="/auth/login")
+    app.register_blueprint(facebook_blueprint, url_prefix="/auth/login")
+
