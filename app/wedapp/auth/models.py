@@ -1,4 +1,4 @@
-from wedapp import db
+from app.wedapp import db
 from flask_login import AnonymousUserMixin
 from . import bcrypt
 
@@ -14,6 +14,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255))
+    email = db.Column(db.String(255), nullable=False, unique=True)
     posts = db.relationship("Post", backref="users", lazy="dynamic")
 
     # def __init__(self, username):
