@@ -8,9 +8,18 @@ services:
       target: /var/lib/mysql
     ports:
     - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    env_file:
+      - app/.env
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_DATABASE: ${MYSQL_DATABASE}
+  app:
+    build:
+      context: app/.
+    ports:
+    - "80:5000"
+    env_file:
+      - app/.env
 volumes:
   db_webblog:
 
