@@ -1,0 +1,15 @@
+# Ignore
+migrations
+.DS_Store
+Dockerfile
+__pycache__
+README.md
+.dockerignore
+.gitignore
+.env
+docker-compose.yml
+venv
+.git
+.idea
+
+
