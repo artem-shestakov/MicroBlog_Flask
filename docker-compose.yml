@@ -9,17 +9,17 @@ services:
     ports:
     - "3306:3306"
     env_file:
-      - app/.env
+      - .env
 #    environment:
 #      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 #      MYSQL_DATABASE: ${MYSQL_DATABASE}
   app:
     build:
-      context: app/.
+      context: .
     ports:
     - "80:5000"
     env_file:
-      - app/.env
+      - .env
 volumes:
   db_webblog:
 
