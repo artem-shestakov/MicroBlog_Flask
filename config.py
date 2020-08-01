@@ -8,6 +8,8 @@ recaptch_public_key = os.getenv("RECAPTCHA_PUBLIC_KEY")
 recaptcha_private_key = os.getenv("RECAPTCHA_PRIVATE_KEY")
 tw_api_key = os.getenv("TWITTER_API_KEY")
 tw_api_secret = os.getenv("TWITTER_API_SECRET")
+fb_client_id = os.getenv("FACEBOOK_CLIENT_ID")
+fb_client_secret = os.getenv("FACEBOOK_CLIENT_SECRET")
 
 
 class Config(object):
@@ -29,3 +31,6 @@ class DevConfig(Config):
     POSTS_PER_PAGE = 10
     TWITTER_API_KEY = f"{tw_api_key}"
     TWITTER_API_SECRET = f"{tw_api_secret}"
+    FACEBOOK_CLIENT_ID = f"{fb_client_id}"
+    FACEBOOK_CLIENT_SECRET = f"{fb_client_secret}"
+
