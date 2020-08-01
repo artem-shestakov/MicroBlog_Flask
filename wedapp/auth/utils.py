@@ -3,7 +3,7 @@ from flask_openid import OpenIDResponse
 from flask_login import login_user
 from flask_dance.consumer import oauth_authorized
 from flask_dance.contrib import facebook
-from app.wedapp import db
+from wedapp import db
 from .models import User
 from . import openid
 

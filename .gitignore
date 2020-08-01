@@ -7,7 +7,7 @@ __pycache__/
 .DS_Store
 
 # Secrets
-app/.env
+.env
 
 # DB files
 db_data

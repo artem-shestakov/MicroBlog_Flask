@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required
 from .forms import RegistrationForm, LoginForm, OpenIDForm
 from . import openid
 from .models import User
-from app.wedapp import db
+from wedapp import db
 
 # Init Blueprint
 auth_blueprint = Blueprint(
