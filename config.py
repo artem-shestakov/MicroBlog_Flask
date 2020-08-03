@@ -17,7 +17,17 @@ class Config(object):
 
 
 class ProdConfig(Config):
-    pass
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://root:{mysql_pass}@db:3306/{mysql_database}"
+    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
+    RECAPTCHA_PUBLIC_KEY = f"{recaptch_public_key}"
+    RECAPTCHA_PRIVATE_KEY = f"{recaptcha_private_key}"
+    POSTS_PER_PAGE = 10
+    TWITTER_API_KEY = f"{tw_api_key}"
+    TWITTER_API_SECRET = f"{tw_api_secret}"
+    FACEBOOK_CLIENT_ID = f"{fb_client_id}"
+    FACEBOOK_CLIENT_SECRET = f"{fb_client_secret}"
 
 
 class DevConfig(Config):
