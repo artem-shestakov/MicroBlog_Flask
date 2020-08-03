@@ -1,7 +1,7 @@
 import os
 from wedapp import db, migrate, create_app
-from wedapp.posts import Post, Comment, Tag, tags
-from wedapp.auth import User
+from wedapp.posts.models import Post, Comment, Tag, tags
+from wedapp.auth.models import User
 
 # Get config Class for app and create app object
 env = os.environ.get("WEBAPP_ENV", "dev")
