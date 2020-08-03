@@ -2,7 +2,7 @@ from flask import session, flash, redirect, url_for, g
 from flask_openid import OpenIDResponse
 from flask_login import login_user
 from flask_dance.consumer import oauth_authorized
-from flask_dance.contrib import facebook
+from flask_dance.contrib import facebook, github
 from wedapp import db
 from .models import User
 from . import openid
@@ -38,6 +38,10 @@ def logged_in(blueprint, token):
     elif blueprint.name == "facebook":
         resp = facebook.get("/me")
         username = resp.json()["name"]
+    elif blueprint.name == "github":
+        resp = github.get("/user")
+        print(">>>>>>>>>>>", resp)
+        username = resp.json()["login"]
     user = User.query.filter_by(username=username).first()
     if not user:
         user = User(username=username)

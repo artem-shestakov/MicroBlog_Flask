@@ -12,6 +12,8 @@ services:
     - type: bind
       source: ./nginx/cert
       target: /webblog/cert
+    depends_on:
+      - app
   db:
     image: mysql
     volumes:
@@ -30,8 +32,11 @@ services:
       context: .
     environment:
       WEBAPP_ENV: Prod
+      OAUTHLIB_INSECURE_TRANSPORT: 1
     env_file:
       - .env
+    depends_on:
+      - db
 volumes:
   db_webblog:
 
