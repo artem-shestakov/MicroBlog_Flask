@@ -11,3 +11,6 @@ __pycache__/
 
 # DB files
 db_data
+
+# Certs
+*.pem

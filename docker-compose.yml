@@ -1,13 +1,25 @@
 version: "3.8"
 services:
+  nginx:
+    image: nginx
+    ports:
+    - "80:80"
+    - "443:443"
+    volumes:
+    - type: bind
+      source: ./nginx/conf.d
+      target: /etc/nginx/conf.d/
+    - type: bind
+      source: ./nginx/cert
+      target: /webblog/cert
   db:
     image: mysql
     volumes:
     - type: volume
       source: db_webblog
       target: /var/lib/mysql
-    ports:
-    - "3306:3306"
+#    ports:
+#    - "3306:3306"
     env_file:
       - .env
 #    environment:
@@ -16,8 +28,8 @@ services:
   app:
     build:
       context: .
-    ports:
-    - "80:5000"
+    environment:
+      WEBAPP_ENV: Prod
     env_file:
       - .env
 volumes:
