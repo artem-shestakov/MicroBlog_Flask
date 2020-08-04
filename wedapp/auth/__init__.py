@@ -4,9 +4,10 @@ from flask_openid import OpenID
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.contrib.github import make_github_blueprint, github
-from wedapp import db
 from flask_dance.consumer import oauth_authorized
-from flask import session, g, flash
+from flask_openid import OpenIDResponse
+from flask import session, g, flash, redirect, url_for
+from wedapp import db
 
 
 # Create LoginManager object
@@ -52,9 +53,33 @@ def create_module(app, **kwargs):
     )
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
-    app.register_blueprint(twitter_blueprint, url_prefix="/auth/twitter")
-    app.register_blueprint(facebook_blueprint, url_prefix="/auth/facebook")
-    app.register_blueprint(github_blueprint, url_prefix="/auth/github")
+    app.register_blueprint(twitter_blueprint, url_prefix="/auth/login")
+    app.register_blueprint(facebook_blueprint, url_prefix="/auth/login")
+    app.register_blueprint(github_blueprint, url_prefix="/auth/login")
+
+
+@openid.after_login
+def create_or_login(resp: OpenIDResponse):
+    from .models import User
+    session['openid'] = resp.identity_url
+    username = resp.nickname or resp.email or resp.fullname
+    # Check data from OpenID provider
+    if not username:
+        flash("Invalid login. Please try again.", category="danger")
+        redirect(url_for(".login"))
+    user = User.query.filter_by(username=username).first()
+    # If user does not exist
+    if user is None:
+        user = User(username=username)
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except Exception as err:
+            print(err)
+    login_user(user)
+    g.user = user
+    flash("You have been logged in.", category="success")
+    return redirect(openid.get_next_url())
 
 
 @oauth_authorized.connect
@@ -67,7 +92,7 @@ def logged_in(blueprint, token):
         username = resp.json()["name"]
     elif blueprint.name == "github":
         resp = github.get("/user")
-        print(">>>>>>>>>>>", resp)
+        print(">>>>>>>>>>>", resp.json())
         username = resp.json()["login"]
     user = User.query.filter_by(username=username).first()
     if not user:
@@ -80,4 +105,3 @@ def logged_in(blueprint, token):
     login_user(user)
     g.user = user
     flash("You have been logged in.", category="success")
-
