@@ -1,19 +1,34 @@
-from wedapp import db
-from wedapp.posts import User, Post, Tag
+from wedapp import create_app, db
+from wedapp.auth import bcrypt
+from wedapp.posts.models import Post, Tag
+from wedapp.auth.models import User, Role
 import random
 from faker import Faker
+
+fake_roles = ["default", "author", "administrator"]
+
+fake_users = [
+    {"username": "user_default", "role": 'default'},
+    {"username": "user_author", "role": "author"},
+    {"username": "admin", "role": "administrator"}
+    ]
 
 Faker.seed(0)
 faker = Faker()
 
 
 # Generate users
-def user_generator(qty):
+def user_generator():
     users = list()
-    for _ in range(qty):
-        user = User()
-        user.username = faker.first_name()
-        user.password = faker.hexify(text="^^^^^^^^^^")
+    for fake_user in fake_users:
+        user = User.query.filter_by(username=fake_user["username"]).first()
+        if user:
+            users.append(user)
+        user = User(fake_user["username"])
+        author = Role.query.filter_by(name=fake_user["role"]).first()
+        # user.username = fake_user["username"]
+        user.password = bcrypt.generate_password_hash("12345678")
+        user.roles.append(author)
         try:
             db.session.add(user)
             db.session.commit()
@@ -40,6 +55,24 @@ def tag_generator(qty):
     return tags
 
 
+def role_generator():
+    roles = list()
+    for fake_role in fake_roles:
+        role = Role.query.filter_by(name=fake_role).first()
+        if role:
+            roles.append(role)
+            continue
+        role = Role(fake_role)
+        db.session.add(role)
+        try:
+            db.session.commit()
+            roles.append(fake_role)
+        except Exception as err:
+            print(f"Fail to add role {err}")
+            db.session.rollback()
+    return roles
+
+
 # Generate post
 def post_geneartor(qty, users, tags):
     for _ in range(qty):
@@ -62,4 +95,9 @@ def post_geneartor(qty, users, tags):
 
 
 if __name__ == '__main__':
-    post_geneartor(25, user_generator(10), tag_generator(10))
+    app = create_app(f"config.DevConfig")
+    db.init_app(app)
+    # Fill database with app context
+    with app.app_context():
+        role_generator()
+        post_geneartor(100, user_generator(), tag_generator(10))
