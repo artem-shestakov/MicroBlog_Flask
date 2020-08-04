@@ -1,4 +1,4 @@
-from flask_login import LoginManager, AnonymousUserMixin, login_user
+from flask_login import LoginManager, AnonymousUserMixin, login_user, current_user
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
@@ -6,8 +6,9 @@ from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.consumer import oauth_authorized
 from flask_openid import OpenIDResponse
-from flask import session, g, flash, redirect, url_for
+from flask import session, g, flash, redirect, url_for, abort
 from wedapp import db
+from functools import update_wrapper
 
 
 # Create LoginManager object
@@ -56,6 +57,17 @@ def create_module(app, **kwargs):
     app.register_blueprint(twitter_blueprint, url_prefix="/auth/login")
     app.register_blueprint(facebook_blueprint, url_prefix="/auth/login")
     app.register_blueprint(github_blueprint, url_prefix="/auth/login")
+
+
+def has_role(name):
+    def decorator_func(f):
+        def wrapper_func(*args, **kwargs):
+            if current_user.has_role(name):
+                return f(*args, **kwargs)
+            else:
+                abort(403)
+        return update_wrapper(wrapper_func, f)
+    return decorator_func
 
 
 @openid.after_login

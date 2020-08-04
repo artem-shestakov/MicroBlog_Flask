@@ -4,6 +4,7 @@ from datetime import datetime
 from wedapp.main.utils import sidebar_data
 from .models import Post, Tag, Comment, db
 from wedapp.auth.models import User
+from wedapp.auth import has_role
 from .forms import CommentForm, PostForm
 
 # Blueprint for posts
@@ -51,6 +52,7 @@ def get_post(post_id):
 
 @posts_blueprint.route("/new", methods=("GET", "POST"))
 @login_required
+@has_role("author")
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
@@ -67,6 +69,7 @@ def new_post():
 
 @posts_blueprint.route("/edit/<int:post_id>", methods=("GET", "POST"))
 @login_required
+@has_role("author")
 def edit_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.user_id == current_user.id:

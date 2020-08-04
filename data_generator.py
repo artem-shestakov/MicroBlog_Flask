@@ -97,6 +97,7 @@ def post_geneartor(qty, users, tags):
 if __name__ == '__main__':
     app = create_app(f"config.DevConfig")
     db.init_app(app)
+    # Fill database with app context
     with app.app_context():
         role_generator()
         post_geneartor(100, user_generator(), tag_generator(10))
