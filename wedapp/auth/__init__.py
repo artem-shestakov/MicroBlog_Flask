@@ -1,9 +1,12 @@
-from flask_login import LoginManager, AnonymousUserMixin
+from flask_login import LoginManager, AnonymousUserMixin, login_user
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.contrib.github import make_github_blueprint, github
+from wedapp import db
+from flask_dance.consumer import oauth_authorized
+from flask import session, g, flash
 
 
 # Create LoginManager object
@@ -49,7 +52,32 @@ def create_module(app, **kwargs):
     )
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
-    app.register_blueprint(twitter_blueprint, url_prefix="/auth/login")
-    app.register_blueprint(facebook_blueprint, url_prefix="/auth/login")
-    app.register_blueprint(github_blueprint, url_prefix="/auth/login")
+    app.register_blueprint(twitter_blueprint, url_prefix="/auth/twitter")
+    app.register_blueprint(facebook_blueprint, url_prefix="/auth/facebook")
+    app.register_blueprint(github_blueprint, url_prefix="/auth/github")
+
+
+@oauth_authorized.connect
+def logged_in(blueprint, token):
+    from .models import User
+    if blueprint.name == "twitter":
+        username = session.get("twitter_oauth_token").get("screen_name")
+    elif blueprint.name == "facebook":
+        resp = facebook.get("/me")
+        username = resp.json()["name"]
+    elif blueprint.name == "github":
+        resp = github.get("/user")
+        print(">>>>>>>>>>>", resp)
+        username = resp.json()["login"]
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        user = User(username=username)
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except Exception as err:
+            print(err)
+    login_user(user)
+    g.user = user
+    flash("You have been logged in.", category="success")
 
