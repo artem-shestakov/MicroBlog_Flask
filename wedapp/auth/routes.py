@@ -1,7 +1,8 @@
-from flask import Blueprint, redirect, render_template, url_for, flash
+from flask import Blueprint, redirect, render_template, url_for, flash, request, jsonify
 from flask_login import login_user, logout_user, login_required
+from flask_jwt_extended import create_access_token
 from .forms import RegistrationForm, LoginForm, OpenIDForm
-from . import openid
+from . import openid, authenticate
 from .models import User
 from wedapp import db
 
@@ -84,3 +85,21 @@ def registration():
     if openid_errors:
         flash(openid_errors, category="danger")
     return render_template("registration.html", form=form)
+
+
+# JWT token route
+@auth_blueprint.route("/api", methods=["POST"])
+def api():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    if not username:
+        return jsonify({"msg": "Missing <username> parameter"}), 400
+    if not password:
+        return jsonify({"msg": "Missing <password> parameter"})
+    user = authenticate(username=username, password=password)
+    if not User:
+        return jsonify({"msg": "Bad password or username"})
+    access_token = create_access_token(identity=user.id)
+    return jsonify(access_token=access_token), 200
