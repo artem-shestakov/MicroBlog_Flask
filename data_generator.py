@@ -5,8 +5,10 @@ from wedapp.auth.models import User, Role
 import random
 from faker import Faker
 
+# The test roles of app
 fake_roles = ["default", "author", "administrator"]
 
+# Test users
 fake_users = [
     {"username": "user_default", "role": 'default'},
     {"username": "user_author", "role": "author"},
@@ -24,6 +26,7 @@ def user_generator():
         user = User.query.filter_by(username=fake_user["username"]).first()
         if user:
             users.append(user)
+            continue
         user = User(fake_user["username"])
         author = Role.query.filter_by(name=fake_user["role"]).first()
         # user.username = fake_user["username"]
@@ -55,6 +58,7 @@ def tag_generator(qty):
     return tags
 
 
+# Roles generator
 def role_generator():
     roles = list()
     for fake_role in fake_roles:

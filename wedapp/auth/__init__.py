@@ -8,6 +8,7 @@ from flask_dance.consumer import oauth_authorized
 from flask_openid import OpenIDResponse
 from flask import session, g, flash, redirect, url_for, abort
 from wedapp import db
+from flask_jwt_extended import JWTManager
 from functools import update_wrapper
 
 
@@ -24,6 +25,8 @@ bcrypt = Bcrypt()
 # Create OpenID object
 openid = OpenID()
 
+# Create JSON web token object
+jwt = JWTManager()
 
 # Reload the user object from the user ID stored in the session
 @login_manager.user_loader
@@ -37,6 +40,7 @@ def create_module(app, **kwargs):
     login_manager.init_app(app)
     bcrypt.init_app(app)
     openid.init_app(app)
+    jwt.init_app(app)
 
     twitter_blueprint = make_twitter_blueprint(
         api_key=app.config.get("TWITTER_API_KEY"),
@@ -59,6 +63,7 @@ def create_module(app, **kwargs):
     app.register_blueprint(github_blueprint, url_prefix="/auth/login")
 
 
+# Decorator function for checkin user's role
 def has_role(name):
     def decorator_func(f):
         def wrapper_func(*args, **kwargs):
@@ -68,6 +73,16 @@ def has_role(name):
                 abort(403)
         return update_wrapper(wrapper_func, f)
     return decorator_func
+
+
+def authenticate(username, password):
+    from .models import User
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return None
+    if not user.check_password(password):
+        return None
+    return user
 
 
 @openid.after_login

@@ -20,13 +20,8 @@ services:
     - type: volume
       source: db_webblog
       target: /var/lib/mysql
-#    ports:
-#    - "3306:3306"
     env_file:
       - .env
-#    environment:
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#      MYSQL_DATABASE: ${MYSQL_DATABASE}
   app:
     build:
       context: .
