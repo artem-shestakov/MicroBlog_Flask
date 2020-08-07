@@ -44,6 +44,7 @@ class DevConfig(Config):
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     RECAPTCHA_PUBLIC_KEY = f"{recaptch_public_key}"
     RECAPTCHA_PRIVATE_KEY = f"{recaptcha_private_key}"
+    PROPAGATE_EXCEPTIONS = True
     POSTS_PER_PAGE = 10
     TWITTER_API_KEY = f"{tw_api_key}"
     TWITTER_API_SECRET = f"{tw_api_secret}"
