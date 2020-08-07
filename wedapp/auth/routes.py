@@ -91,7 +91,7 @@ def registration():
 @auth_blueprint.route("/api", methods=["POST"])
 def api():
     if not request.is_json:
-        return jsonify({"msg": "Missing JSON in request"}), 400
+        return jsonify({"msg": "Miexportssing JSON in request"}), 400
     username = request.json.get("username", None)
     password = request.json.get("password", None)
     if not username:
