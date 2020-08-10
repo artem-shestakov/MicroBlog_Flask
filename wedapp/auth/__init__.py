@@ -6,10 +6,11 @@ from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.consumer import oauth_authorized
 from flask_openid import OpenIDResponse
-from flask import session, g, flash, redirect, url_for, abort
+from flask import session, g, flash, redirect, url_for, abort, current_app
 from wedapp import db
 from flask_jwt_extended import JWTManager
 from functools import update_wrapper
+from pymysql import OperationalError
 
 
 # Create LoginManager object
@@ -27,6 +28,7 @@ openid = OpenID()
 
 # Create JSON web token object
 jwt = JWTManager()
+
 
 # Reload the user object from the user ID stored in the session
 @login_manager.user_loader
@@ -75,16 +77,23 @@ def has_role(name):
     return decorator_func
 
 
+# Check user and password before return JWT
 def authenticate(username, password):
     from .models import User
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        return None
-    if not user.check_password(password):
-        return None
-    return user
+    try:
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            return None
+        if not user.check_password(password):
+            return None
+        return user
+    except OperationalError as err:
+        current_app.logger.error(f"Database error {err}")
+    except Exception as err:
+        current_app.logger.error(f"Database error {err}")
 
 
+# Handler run after response from OpenID provider
 @openid.after_login
 def create_or_login(resp: OpenIDResponse):
     from .models import User
@@ -109,6 +118,7 @@ def create_or_login(resp: OpenIDResponse):
     return redirect(openid.get_next_url())
 
 
+# Handler run after response from OAuth provider
 @oauth_authorized.connect
 def logged_in(blueprint, token):
     from .models import User
@@ -119,7 +129,6 @@ def logged_in(blueprint, token):
         username = resp.json()["name"]
     elif blueprint.name == "github":
         resp = github.get("/user")
-        print(">>>>>>>>>>>", resp.json())
         username = resp.json()["login"]
     user = User.query.filter_by(username=username).first()
     if not user:
