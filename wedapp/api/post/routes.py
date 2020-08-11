@@ -47,7 +47,7 @@ def add_tags_to_post(post, tags):
             current_app.logger.error(f"Database error {err}")
 
 
-# API request handler function
+# API request handler function for posts
 class PostApi(Resource):
     @marshal_with(post_fields)
     @jwt_required
@@ -109,6 +109,24 @@ class PostApi(Resource):
             db.session.merge(post)
             db.session.commit()
             return {"id": post_id}, 201
+        except OperationalError as err:
+            current_app.logger.info(f"Database error {err}")
+        except Exception as err:
+            current_app.logger.info(f"Database error {err}")
+
+    @jwt_required
+    def delete(self, post_id=None):
+        if not post_id:
+            abort(400)
+        try:
+            post = Post.query.get(post_id)
+            if not post:
+                abort(404)
+            if get_jwt_identity() != post.user_id:
+                abort(403)
+            db.session.delete(post)
+            db.session.commit()
+            return "", 204
         except OperationalError as err:
             current_app.logger.info(f"Database error {err}")
         except Exception as err:
