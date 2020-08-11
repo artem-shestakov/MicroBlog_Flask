@@ -30,6 +30,13 @@ post_fields = {
     "tags": fields.List(fields.Nested(tag_fields))
 }
 
+comment_field = {
+    "id": fields.Integer(),
+    "name": fields.String(),
+    "text": fields.String(),
+    "date": fields.DateTime(dt_format="iso8601")
+}
+
 
 # Add tags to post by through API request
 def add_tags_to_post(post, tags):
@@ -54,7 +61,8 @@ class PostApi(Resource):
     # GET request
     def get(self, post_id=None):
         if post_id:
-            pass
+            post = Post.query.get(post_id)
+            return post
         else:
             # Getting arguments from request
             args = post_get_parser.parse_args()
@@ -127,6 +135,24 @@ class PostApi(Resource):
             db.session.delete(post)
             db.session.commit()
             return "", 204
+        except OperationalError as err:
+            current_app.logger.info(f"Database error {err}")
+        except Exception as err:
+            current_app.logger.info(f"Database error {err}")
+
+
+class CommentPostApi(Resource):
+    @marshal_with(comment_field)
+    @jwt_required
+    def get(self, post_id=None):
+        if not post_id:
+            abort(400)
+        try:
+            post = Post.query.get(post_id)
+            if not post:
+                abort(404)
+            comments = post.comments.all()
+            return comments
         except OperationalError as err:
             current_app.logger.info(f"Database error {err}")
         except Exception as err:

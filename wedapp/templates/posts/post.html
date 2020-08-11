@@ -28,7 +28,7 @@
                 {% for comment in comments %}
                 <div class="shadow-sm p-2">
                     <dt>By: {{ comment.name }} Date: {{ comment.date }}</dt>
-                    <dd>{{ comment.text }}</dd>
+                    <dd>{{ comment.text | safe }}</dd>
                 </div>
                 {% endfor%}
             {% endif %}
@@ -61,7 +61,7 @@
                             <p class="help-block">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
-                    {{ form.text(id='editor', class_='form-control') }}
+                    {{ form.text(class_='form-control') }}
                 </div>
                 <input class="btn btn-primary" type="submit" value="Add comment">
             </form>
