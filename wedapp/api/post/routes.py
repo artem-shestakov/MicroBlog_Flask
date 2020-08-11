@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import current_app, abort
 from pymysql import OperationalError
 from .fields import HTMLField
-from .parser import post_get_parser, post_post_parser
+from .parser import post_get_parser, post_post_parser, post_put_parser
 from wedapp.posts.models import Post, Tag
 from wedapp.auth.models import User
 from wedapp import db
@@ -84,6 +84,31 @@ class PostApi(Resource):
             db.session.add(new_post)
             db.session.commit()
             return {'id': new_post.id}, 201
+        except OperationalError as err:
+            current_app.logger.info(f"Database error {err}")
+        except Exception as err:
+            current_app.logger.info(f"Database error {err}")
+
+    @jwt_required
+    def put(self, post_id=None):
+        if not post_id:
+            abort(400)
+        try:
+            post = Post.query.get(post_id)
+            if not post:
+                abort(404)
+            args = post_put_parser.parse_args()
+            if  get_jwt_identity() != post.user_id:
+                abort(403)
+            if args["title"]:
+                post.title = args["title"]
+            if args["text"]:
+                post.text = args["text"]
+            if args["tags"]:
+                add_tags_to_post(post, args["tags"])
+            db.session.merge(post)
+            db.session.commit()
+            return {"id": post_id}, 201
         except OperationalError as err:
             current_app.logger.info(f"Database error {err}")
         except Exception as err:
