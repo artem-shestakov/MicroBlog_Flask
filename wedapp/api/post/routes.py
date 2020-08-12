@@ -4,7 +4,7 @@ from flask import current_app, abort
 from pymysql import OperationalError
 from .fields import HTMLField
 from .parser import post_get_parser, post_post_parser, post_put_parser
-from wedapp.posts.models import Post, Tag
+from wedapp.posts.models import Post, Tag, Comment
 from wedapp.auth.models import User
 from wedapp import db
 
@@ -58,7 +58,7 @@ def add_tags_to_post(post, tags):
 class PostApi(Resource):
     @marshal_with(post_fields)
     @jwt_required
-    # GET request
+    # GET information from post
     def get(self, post_id=None):
         if post_id:
             post = Post.query.get(post_id)
@@ -81,6 +81,7 @@ class PostApi(Resource):
             return posts.items
 
     @jwt_required
+    # Create post
     def post(self, post_id=None):
         args = post_post_parser.parse_args(strict=True)
         new_post = Post(title=args["title"])
@@ -98,6 +99,7 @@ class PostApi(Resource):
             current_app.logger.info(f"Database error {err}")
 
     @jwt_required
+    # Update post
     def put(self, post_id=None):
         if not post_id:
             abort(400)
@@ -123,6 +125,7 @@ class PostApi(Resource):
             current_app.logger.info(f"Database error {err}")
 
     @jwt_required
+    # Delete post
     def delete(self, post_id=None):
         if not post_id:
             abort(400)
@@ -141,9 +144,11 @@ class PostApi(Resource):
             current_app.logger.info(f"Database error {err}")
 
 
+# API request handler function for comments in posts
 class CommentPostApi(Resource):
     @marshal_with(comment_field)
     @jwt_required
+    # Get all comments by post ID
     def get(self, post_id=None):
         if not post_id:
             abort(400)
@@ -153,6 +158,29 @@ class CommentPostApi(Resource):
                 abort(404)
             comments = post.comments.all()
             return comments
+        except OperationalError as err:
+            current_app.logger.info(f"Database error {err}")
+        except Exception as err:
+            current_app.logger.info(f"Database error {err}")
+
+
+# Comments API
+class CommentsApi(Resource):
+    @jwt_required
+    # Delete comment by ID
+    def delete(self, comment_id=None):
+        if not comment_id:
+            abort(400)
+        try:
+            comment = Comment.query.get(comment_id)
+            if not comment:
+                abort(404)
+            user = User.query.filter_by(username="admin").one()
+            if get_jwt_identity() != user.id:
+                abort(403)
+            db.session.delete(comment)
+            db.session.commit()
+            return "", 204
         except OperationalError as err:
             current_app.logger.info(f"Database error {err}")
         except Exception as err:
