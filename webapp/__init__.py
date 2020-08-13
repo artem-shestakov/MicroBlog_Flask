@@ -1,9 +1,11 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_celery import Celery
 
 db = SQLAlchemy()
 migrate = Migrate()
+celery = Celery()
 
 
 def create_app(config_object):
@@ -17,6 +19,7 @@ def create_app(config_object):
 
     db.init_app(app)
     migrate.init_app(app, db)
+    celery.init_app(app)
 
     main_create_module(app)
     posts_create_module(app)

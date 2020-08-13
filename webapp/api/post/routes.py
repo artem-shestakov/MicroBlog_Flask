@@ -4,9 +4,9 @@ from flask import current_app, abort
 from pymysql import OperationalError
 from .fields import HTMLField
 from .parser import post_get_parser, post_post_parser, post_put_parser
-from wedapp.posts.models import Post, Tag, Comment
-from wedapp.auth.models import User
-from wedapp import db
+from webapp.posts.models import Post, Tag, Comment
+from webapp.auth.models import User
+from webapp import db
 
 # JSON format for tag
 tag_fields = {

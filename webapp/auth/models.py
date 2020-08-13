@@ -1,4 +1,4 @@
-from wedapp import db
+from webapp import db
 from flask_login import AnonymousUserMixin
 from . import bcrypt
 

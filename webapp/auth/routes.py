@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token
 from .forms import RegistrationForm, LoginForm, OpenIDForm
 from . import openid, authenticate
 from .models import User
-from wedapp import db
+from webapp import db
 
 # Init Blueprint
 auth_blueprint = Blueprint(

@@ -1,5 +1,5 @@
 import os
-from wedapp import create_app
+from webapp import create_app
 
 # Get config Class for app and create app
 env = os.environ.get("WEBAPP_ENV", "dev")

@@ -7,7 +7,7 @@ from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.consumer import oauth_authorized
 from flask_openid import OpenIDResponse
 from flask import session, g, flash, redirect, url_for, abort, current_app
-from wedapp import db
+from webapp import db
 from flask_jwt_extended import JWTManager
 from functools import update_wrapper
 from pymysql import OperationalError

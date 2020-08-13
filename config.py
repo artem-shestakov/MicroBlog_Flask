@@ -12,6 +12,8 @@ fb_client_id = os.getenv("FACEBOOK_CLIENT_ID")
 fb_client_secret = os.getenv("FACEBOOK_CLIENT_SECRET")
 github_client_id = os.getenv("GITHUB_CLIENT_ID")
 github_client_secret = os.getenv("GITHUB_CLIENT_SECRET")
+rabbitmq_user = os.getenv("RABBITMQ_DEFAULT_USER")
+rabbitmq_user_password = os.getenv("RABBITMQ_DEFAULT_PASS")
 
 
 class Config(object):
@@ -22,6 +24,8 @@ class ProdConfig(Config):
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://root:{mysql_pass}@db:3306/{mysql_database}"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CELERY_BROKER_URL = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@rmq//"
+    CELERY_RESULT_BACKEND = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
     PREFERRED_URL_SCHEME = "https"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     RECAPTCHA_PUBLIC_KEY = f"{recaptch_public_key}"
@@ -40,6 +44,8 @@ class DevConfig(Config):
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://root:{mysql_pass}@127.0.0.1:3306/{mysql_database}"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CELERY_BROKER_URL = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
+    CELERY_RESULT_BACKEND = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
     PREFERRED_URL_SCHEME = "https"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     RECAPTCHA_PUBLIC_KEY = f"{recaptch_public_key}"
