@@ -1,7 +1,7 @@
-from wedapp import create_app, db
-from wedapp.auth import bcrypt
-from wedapp.posts.models import Post, Tag
-from wedapp.auth.models import User, Role
+from webapp import create_app, db
+from webapp.auth import bcrypt
+from webapp.posts.models import Post, Tag
+from webapp.auth.models import User, Role
 import random
 from faker import Faker
 
