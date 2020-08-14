@@ -31,6 +31,7 @@ class ProdConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CELERY_BROKER_URL = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@rmq//"
     CELERY_RESULT_BACKEND = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
+    SERVER_NAME = "your_domain"
     PREFERRED_URL_SCHEME = "https"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     RECAPTCHA_PUBLIC_KEY = f"{recaptch_public_key}"
@@ -59,8 +60,8 @@ class DevConfig(Config):
     #         'schedule': crontab(minute="*/1")
     #     },
     # }
-
-    PREFERRED_URL_SCHEME = "https"
+    SERVER_NAME = "127.0.0.1:5000"
+    PREFERRED_URL_SCHEME = "http"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     SMTP_FROM = smtp_from
     SMTP_SERVER = smtp_server
