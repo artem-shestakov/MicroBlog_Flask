@@ -1,4 +1,5 @@
 import os
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,6 +15,10 @@ github_client_id = os.getenv("GITHUB_CLIENT_ID")
 github_client_secret = os.getenv("GITHUB_CLIENT_SECRET")
 rabbitmq_user = os.getenv("RABBITMQ_DEFAULT_USER")
 rabbitmq_user_password = os.getenv("RABBITMQ_DEFAULT_PASS")
+smtp_from = os.getenv("SMTP_FROM")
+smtp_server = os.getenv("SMTP_SERVER")
+smtp_user = os.getenv("SMTP_USER")
+smtp_pass = os.getenv("SMTP_PASS")
 
 
 class Config(object):
@@ -46,8 +51,21 @@ class DevConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CELERY_BROKER_URL = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
     CELERY_RESULT_BACKEND = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
+    CELERY_IMPORTS = ["webapp.posts.tasks"]
+    CELERY_ALWAYS_EAGER = False
+    # CELERYBEAT_SCHEDULE = {
+    #     'weekly-digest': {
+    #         'task': 'webapp.posts.tasks.remind',
+    #         'schedule': crontab(minute="*/1")
+    #     },
+    # }
+
     PREFERRED_URL_SCHEME = "https"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
+    SMTP_FROM = smtp_from
+    SMTP_SERVER = smtp_server
+    SMTP_USER = smtp_user
+    SMTP_PASS = smtp_pass
     RECAPTCHA_PUBLIC_KEY = f"{recaptch_public_key}"
     RECAPTCHA_PRIVATE_KEY = f"{recaptcha_private_key}"
     PROPAGATE_EXCEPTIONS = True
@@ -58,4 +76,5 @@ class DevConfig(Config):
     FACEBOOK_CLIENT_SECRET = f"{fb_client_secret}"
     GITHUB_CLIENT_ID = f"{github_client_id}"
     GITHUB_CLIENT_SECRET = f"{github_client_secret}"
+
 
