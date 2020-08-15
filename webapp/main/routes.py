@@ -2,6 +2,7 @@ from flask import Blueprint, current_app, render_template, abort
 import sqlalchemy
 from webapp.posts.models import Post
 from .utils import sidebar_data
+from webapp import cache
 
 # Blueprint for main module
 main_blueprint = Blueprint(
@@ -28,6 +29,7 @@ def page_not_found(error):
 # Route to index page or page with number "page", by default 1
 @main_blueprint.route("/")
 @main_blueprint.route("/<int:page>")
+@cache.cached(timeout=60)
 def home(page=1):
     try:
         posts = Post.query.order_by(Post.publish_date.desc()).paginate(page, current_app.config.get("POSTS_PER_PAGE", 10),
