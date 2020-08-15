@@ -2,11 +2,14 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_celery import Celery
+from flask_debugtoolbar import DebugToolbarExtension
+from flask_caching import Cache
 
 db = SQLAlchemy()
 migrate = Migrate()
 celery = Celery()
-
+debugtoolbar = DebugToolbarExtension()
+cache = Cache()
 
 def create_app(config_object):
     from .main import create_module as main_create_module
@@ -20,6 +23,9 @@ def create_app(config_object):
     db.init_app(app)
     migrate.init_app(app, db)
     celery.init_app(app)
+
+    debugtoolbar.init_app(app)
+    cache.init_app(app)
 
     main_create_module(app)
     posts_create_module(app)
