@@ -29,7 +29,6 @@ def user_generator():
             continue
         user = User(fake_user["username"])
         author = Role.query.filter_by(name=fake_user["role"]).first()
-        # user.username = fake_user["username"]
         user.password = bcrypt.generate_password_hash("12345678")
         user.roles.append(author)
         try:
