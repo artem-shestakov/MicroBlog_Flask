@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, abort
+from flask import Blueprint, render_template, flash, redirect, url_for, abort, request, get_flashed_messages, session
 from flask_login import login_required, current_user
 from datetime import datetime
-from webapp.main.utils import sidebar_data
+from webapp.main.utils import sidebar_data, cache
 from .models import Post, Tag, Comment, db
 from webapp.auth.models import User
 from webapp.auth import has_role
@@ -17,6 +17,17 @@ posts_blueprint = Blueprint(
 )
 
 
+def make_chache_key(*args, **kwargs):
+    path = request.path
+    args = str(hash(frozenset(request.args.items())))
+    message = str(hash(frozenset(get_flashed_messages())))
+    if current_user.is_authanticated:
+        roles = str(current_user.roles)
+    else:
+        roles = ""
+    return (path + args + roles + session.get("locale", "") + message).encode("utf-8")
+
+
 @posts_blueprint.app_errorhandler(404)
 def page_not_found(error):
     """ Return error 404 """
@@ -30,6 +41,7 @@ def page_not_found(error):
 
 
 @posts_blueprint.route('/post/<int:post_id>', methods=('GET', 'POST'))
+@cache.cached(timeout=60, key_prefix=make_chache_key)
 def get_post(post_id):
     form = CommentForm()
     if form.validate_on_submit():
@@ -94,6 +106,7 @@ def edit_post(post_id):
 
 
 @posts_blueprint.route('/tag/<string:tag_title>')
+@cache.cached(timeout=60, key_prefix=make_chache_key)
 def posts_by_tag(tag_title):
     tag = Tag.query.filter_by(title=tag_title).first_or_404()
     posts = tag.posts.order_by(Post.publish_date.desc()).all()
@@ -109,6 +122,7 @@ def posts_by_tag(tag_title):
 
 
 @posts_blueprint.route('/user/<string:username>')
+@cache.cached(timeout=60, key_prefix=make_chache_key)
 def posts_by_user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.publish_date.desc()).all()
