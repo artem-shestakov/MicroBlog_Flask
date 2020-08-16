@@ -1,4 +1,4 @@
-from webapp import db
+from webapp import db, cache
 from flask_login import AnonymousUserMixin
 from . import bcrypt
 
@@ -29,6 +29,7 @@ class User(db.Model):
         self.username = username
 
     # Check user's role
+    @cache.memoize(timeout=60)
     def has_role(self, role_name):
         for role in self.roles:
             if role.name == role_name:
