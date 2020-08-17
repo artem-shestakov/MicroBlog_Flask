@@ -21,11 +21,11 @@ def make_chache_key(*args, **kwargs):
     path = request.path
     args = str(hash(frozenset(request.args.items())))
     message = str(hash(frozenset(get_flashed_messages())))
-    if current_user.is_authanticated:
+    if current_user.is_authenticated:
         roles = str(current_user.roles)
     else:
         roles = ""
-    return (path + args + roles + session.get("locale", "") + message).encode("utf-8")
+    return str((path + args + roles + session.get("locale", "") + message).encode("utf-8"))
 
 
 @posts_blueprint.app_errorhandler(404)

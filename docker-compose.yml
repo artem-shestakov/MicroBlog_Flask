@@ -16,12 +16,28 @@ services:
       - app
   db:
     image: mysql
+    ports:
+    - "3306:3306"
     volumes:
     - type: volume
       source: db_webblog
       target: /var/lib/mysql
     env_file:
       - .env
+  redis:
+    image: redis
+    ports:
+    - "6379:6379"
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
   app:
     build:
       context: .
@@ -32,6 +48,9 @@ services:
       - .env
     depends_on:
       - db
+      - rabbitmq
+      - redis
+
 volumes:
   db_webblog:
 

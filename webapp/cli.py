@@ -26,8 +26,9 @@ def register(app):
         try:
             log.info("Getting the list of users")
             users = User.query.all()
+            click.echo(f"{'ID':4}{'Username':30}{'User`s roles'}")
             for user in users:
-                click.echo(f"{user.id} {user.username} {user.roles}")
+                click.echo(f"{user.id:<4}{user.username:<30}{user.roles}")
         except Exception as err:
             log.error(f"Error with getting the list of users. Error {err}")
 
