@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Registration {% endblock %}
+{% block title %} {{ _('Registration') }} {% endblock %}
 
 {% block body %}
 <div class="row justify-content-center">
@@ -38,7 +38,7 @@
                 {{ form.recaptcha.label }}
                 {{ form.recaptcha() }}
             </div>
-            <input class="btn btn-success" type="submit" value="Register">
+            <input class="btn btn-success" type="submit" value="{{ _('Register') }}">
         </form>
     </div>
 </div>

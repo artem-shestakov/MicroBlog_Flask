@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Edit post {{ post.title }}{% endblock %}
+{% block title %}{{ _('Edit post')}}{{ post.title }}{% endblock %}
 
 {% block body %}
 <div class="row justify-content-center">
@@ -24,7 +24,7 @@
                     {% endif %}
                     {{ form.text(id='editor', class_='form-control') }}
                 </div>
-                <input class="btn btn-primary" type="submit" value="Save">
+                <input class="btn btn-primary" type="submit" value="{{ _('Save') }}">
         </form>
     </div>
 </div>

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Login{% endblock %}
+{% block title %}{{ _('Login') }}{% endblock %}
 
 {% block body %}
 <div class="row justify-content-center">
@@ -28,7 +28,7 @@
                 {{ form.remember_me.label }}
                 {{ form.remember_me(class_='form-control') }}
             </div>
-            <input class="btn btn-success" type="submit" value="Login">
+            <input class="btn btn-success" type="submit" value="{{ _('Login') }}">
         </form>
         <h2 class="text-center">Register/Login With Twitter</h2>
         <a href="{{ url_for('twitter.login') }}">Login</a>

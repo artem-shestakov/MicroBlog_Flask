@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-19 12:42+0300\n"
+"POT-Creation-Date: 2020-08-19 14:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,50 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
+
+#: webapp/auth/forms.py:13
+msgid "OpenID"
+msgstr ""
+
+#: webapp/auth/forms.py:20 webapp/auth/forms.py:48
+msgid "Username"
+msgstr ""
+
+#: webapp/auth/forms.py:21 webapp/auth/forms.py:49
+msgid "Password"
+msgstr ""
+
+#: webapp/auth/forms.py:22
+msgid "Remember me"
+msgstr ""
+
+#: webapp/auth/forms.py:34 webapp/auth/forms.py:38
+msgid "Invalid username or password"
+msgstr ""
+
+#: webapp/auth/forms.py:50
+msgid "Confirm password"
+msgstr ""
+
+#: webapp/auth/forms.py:63
+msgid "User with this name already exists"
+msgstr ""
+
+#: webapp/posts/forms.py:9
+msgid "Name"
+msgstr ""
+
+#: webapp/posts/forms.py:10
+msgid "Comment"
+msgstr ""
+
+#: webapp/posts/forms.py:14
+msgid "Title"
+msgstr ""
+
+#: webapp/posts/forms.py:15
+msgid "Content"
+msgstr ""
 
 #: webapp/templates/403.html:10
 msgid "ERROR 403"
@@ -62,11 +106,77 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: webapp/templates/navbar.html:38
+#: webapp/templates/auth/registration.html:3 webapp/templates/navbar.html:38
 msgid "Registration"
 msgstr ""
 
+#: webapp/templates/auth/login.html:2 webapp/templates/auth/login.html:31
 #: webapp/templates/navbar.html:41
 msgid "Login"
+msgstr ""
+
+#: webapp/templates/auth/registration.html:41
+msgid "Register"
+msgstr ""
+
+#: webapp/templates/posts/edit.html:2
+msgid "Edit post"
+msgstr ""
+
+#: webapp/templates/posts/edit.html:27
+msgid "Save"
+msgstr ""
+
+#: webapp/templates/posts/new.html:2
+msgid "New post"
+msgstr ""
+
+#: webapp/templates/posts/new.html:27
+msgid "Publish post"
+msgstr ""
+
+#: webapp/templates/posts/post.html:14
+msgid "Edit"
+msgstr ""
+
+#: webapp/templates/posts/post.html:20
+msgid "Comments"
+msgstr ""
+
+#: webapp/templates/posts/post.html:26
+msgid "There is no comments. You'll bi first!"
+msgstr ""
+
+#: webapp/templates/posts/post.html:30
+#, python-format
+msgid "By: %(name)s Date: %(date)s"
+msgstr ""
+
+#: webapp/templates/posts/post.html:41
+msgid "New comment:"
+msgstr ""
+
+#: webapp/templates/posts/post.html:66
+msgid "Add comment"
+msgstr ""
+
+#: webapp/templates/posts/tag.html:5
+#, python-format
+msgid "%(tag)s tag"
+msgstr ""
+
+#: webapp/templates/posts/tag.html:11
+#, python-format
+msgid "Posts with tag %(tag)s"
+msgstr ""
+
+#: webapp/templates/posts/user.html:4
+#, python-format
+msgid "%(username)s' posts"
+msgstr ""
+
+#: webapp/templates/posts/user.html:9
+#, python-format
+msgid "Posts by user %(username)s"
 msgstr ""
 
