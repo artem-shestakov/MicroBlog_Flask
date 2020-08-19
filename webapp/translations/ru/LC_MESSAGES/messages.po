@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-19 12:42+0300\n"
+"POT-Creation-Date: 2020-08-19 14:15+0300\n"
 "PO-Revision-Date: 2020-08-19 12:49+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,6 +19,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
+#: webapp/auth/forms.py:13
+msgid "OpenID"
+msgstr "OpenID"
+
+#: webapp/auth/forms.py:20 webapp/auth/forms.py:48
+msgid "Username"
+msgstr "Пользователь"
+
+#: webapp/auth/forms.py:21 webapp/auth/forms.py:49
+msgid "Password"
+msgstr "Пароль"
+
+#: webapp/auth/forms.py:22
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+#: webapp/auth/forms.py:34 webapp/auth/forms.py:38
+msgid "Invalid username or password"
+msgstr "Неверный логин или пароль"
+
+#: webapp/auth/forms.py:50
+msgid "Confirm password"
+msgstr "Подтверждение пароля"
+
+#: webapp/auth/forms.py:63
+msgid "User with this name already exists"
+msgstr "Пользователь с таким логином уже существует"
+
+#: webapp/posts/forms.py:9
+msgid "Name"
+msgstr "Название"
+
+#: webapp/posts/forms.py:10
+msgid "Comment"
+msgstr "Текст комментария"
+
+#: webapp/posts/forms.py:14
+msgid "Title"
+msgstr "Название"
+
+#: webapp/posts/forms.py:15
+msgid "Content"
+msgstr "Содержание"
+
 #: webapp/templates/403.html:10
 msgid "ERROR 403"
 msgstr "ОШИБКА 403"
@@ -29,11 +73,11 @@ msgstr "Упс, доступ не разрешен"
 
 #: webapp/templates/404.html:10
 msgid "ERROR 404"
-msgstr "ОШИБА 404"
+msgstr "ОШИБКА 404"
 
 #: webapp/templates/404.html:11
 msgid "Oops, something went wrong (:"
-msgstr "Упсб кажется что-то пошло не так"
+msgstr "Упс, кажется что-то пошло не так"
 
 #: webapp/templates/500.html:10
 msgid "ERROR 500"
@@ -64,11 +108,80 @@ msgstr "Привет %(username)s"
 msgid "Logout"
 msgstr "Выход"
 
-#: webapp/templates/navbar.html:38
+#: webapp/templates/auth/registration.html:3 webapp/templates/navbar.html:38
 msgid "Registration"
 msgstr "Регистрация"
 
+#: webapp/templates/auth/login.html:2 webapp/templates/auth/login.html:31
 #: webapp/templates/navbar.html:41
 msgid "Login"
 msgstr "Войти"
+
+#: webapp/templates/auth/registration.html:41
+msgid "Register"
+msgstr "Регистрация"
+
+#: webapp/templates/posts/edit.html:2
+msgid "Edit post"
+msgstr "Редактировать статью"
+
+#: webapp/templates/posts/edit.html:27
+msgid "Save"
+msgstr "Сохранить"
+
+#: webapp/templates/posts/new.html:2
+msgid "New post"
+msgstr "Новая статья"
+
+#: webapp/templates/posts/new.html:27
+msgid "Publish post"
+msgstr "Опубликовать статью"
+
+#: webapp/templates/posts/post.html:14
+msgid "Edit"
+msgstr "Редактировать"
+
+#: webapp/templates/posts/post.html:20
+msgid "Comments"
+msgstr "Комментарии"
+
+#: webapp/templates/posts/post.html:26
+msgid "There is no comments. You'll bi first!"
+msgstr "Комментариев нет. Вы можете быть первым!"
+
+#: webapp/templates/posts/post.html:30
+#, python-format
+msgid "By: %(name)s Date: %(date)s"
+msgstr "Автор: %(name)s Дата: %(date)s"
+
+#: webapp/templates/posts/post.html:41
+msgid "New comment:"
+msgstr "Новый комментарий:"
+
+#: webapp/templates/posts/post.html:66
+msgid "Add comment"
+msgstr "Добавить комментарий"
+
+#: webapp/templates/posts/tag.html:5
+#, python-format
+msgid "%(tag)s tag"
+msgstr "%(tag)s тег"
+
+#: webapp/templates/posts/tag.html:11
+#, python-format
+msgid "Posts with tag %(tag)s"
+msgstr "Статьи с тегом %(tag)s"
+
+#: webapp/templates/posts/user.html:4
+#, python-format
+msgid "%(username)s' posts"
+msgstr "Посты %(username)s"
+
+#: webapp/templates/posts/user.html:9
+#, python-format
+msgid "Posts by user %(username)s"
+msgstr "Посты пользователя %(username)s"
+
+#~ msgid "%(name)s"
+#~ msgstr ""
 

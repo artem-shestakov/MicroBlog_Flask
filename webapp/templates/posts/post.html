@@ -11,23 +11,23 @@
         <div>
             {{ post.text | safe }}
         </div>
-        <a class="btn btn-outline-warning" role="button" aria-pressed="true" href="{{ url_for('.edit_post', post_id=post.id) }}">Edit</a>
+        <a class="btn btn-outline-warning" role="button" aria-pressed="true" href="{{ url_for('.edit_post', post_id=post.id) }}">{{ _('Edit') }}</a>
     </div>
 </div>
 <div class="p-4 shadow-sm">
     <div class="row">
         <div class="col">
-            <h3>Comments</h3>
+            <h3>{{ _('Comments') }}</h3>
         </div>
     </div>
     <div class="row p-2">
         <div class="col">
             {% if comments | length == 0 %}
-                <p>There is no comments. You'll bi first!</p>
+                <p>{{ _('There is no comments. You\'ll bi first!')}}</p>
             {% else %}
                 {% for comment in comments %}
                 <div class="shadow-sm p-2">
-                    <dt>By: {{ comment.name }} Date: {{ comment.date }}</dt>
+                    <dt>{{ _('By: %(name)s Date: %(date)s', name=comment.name, date=comment.date) }}</dt>
                     <dd>{{ comment.text | safe }}</dd>
                 </div>
                 {% endfor%}
@@ -38,7 +38,7 @@
 <div class="p-4 shadow-sm">
     <div class="row">
         <div class="col">
-            <h4>New comment:</h4>
+            <h4>{{ _('New comment:')}}</h4>
         </div>
     </div>
     <div class="row">
@@ -46,7 +46,7 @@
             <form method="post" action="{{ url_for('posts.get_post', post_id=post.id) }}">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                    {{ form.name. label }}
+                    {{ form.name.label }}
                     {% if form.name.error %}
                         {% for error in form.name.error %}
                             <p class="help-block">{{ error }}</p>
@@ -63,7 +63,7 @@
                     {% endif %}
                     {{ form.text(class_='form-control') }}
                 </div>
-                <input class="btn btn-primary" type="submit" value="Add comment">
+                <input class="btn btn-primary" type="submit" value="{{ _('Add comment') }}">
             </form>
         </div>
     </div>
