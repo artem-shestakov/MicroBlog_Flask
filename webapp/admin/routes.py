@@ -1,6 +1,7 @@
 from flask_admin import BaseView, expose
 from flask_admin.contrib.sqla import ModelView
-from flask_login import login_required
+from flask_admin.contrib.fileadmin import FileAdmin
+from flask_login import login_required, current_user
 from webapp.auth import has_role
 from .forms import CKTextArea
 
@@ -14,7 +15,13 @@ class StatisticView(BaseView):
 
 
 class DBView(ModelView):
-    pass
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.has_role("administrator")
+
+
+class FileView(FileAdmin):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.has_role("administrator")
 
 
 class PostView(DBView):
