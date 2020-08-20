@@ -14,3 +14,16 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+    - type: volume
+      source: webblog_dev
+      target: /var/lib/mysql
+
+volumes:
+  webblog_dev:

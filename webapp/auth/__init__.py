@@ -1,7 +1,6 @@
 from flask_login import LoginManager, AnonymousUserMixin, login_user, current_user
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.consumer import oauth_authorized
@@ -32,9 +31,9 @@ jwt = JWTManager()
 
 # Reload the user object from the user ID stored in the session
 @login_manager.user_loader
-def load_user(userid):
+def load_user(user_id):
     from .models import User
-    return User.query.get(userid)
+    return User.query.get(user_id)
 
 
 # Init objects and register blueprint
@@ -43,11 +42,6 @@ def create_module(app, **kwargs):
     bcrypt.init_app(app)
     openid.init_app(app)
     jwt.init_app(app)
-
-    twitter_blueprint = make_twitter_blueprint(
-        api_key=app.config.get("TWITTER_API_KEY"),
-        api_secret=app.config.get("TWITTER_API_SECRET")
-    )
 
     facebook_blueprint = make_facebook_blueprint(
         client_id=app.config.get("FACEBOOK_CLIENT_ID"),
@@ -60,7 +54,6 @@ def create_module(app, **kwargs):
     )
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
-    app.register_blueprint(twitter_blueprint, url_prefix="/auth/login")
     app.register_blueprint(facebook_blueprint, url_prefix="/auth/login")
     app.register_blueprint(github_blueprint, url_prefix="/auth/login")
 
@@ -78,10 +71,10 @@ def has_role(name):
 
 
 # Check user and password before return JWT
-def authenticate(username, password):
+def authenticate(email, password):
     from .models import User
     try:
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         if not user:
             return None
         if not user.check_password(password):

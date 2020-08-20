@@ -5,6 +5,7 @@ from .forms import RegistrationForm, LoginForm, OpenIDForm
 from . import openid, authenticate
 from .models import User
 from webapp import db
+from flask_babel import gettext
 
 # Init Blueprint
 auth_blueprint = Blueprint(
@@ -36,7 +37,7 @@ def login():
 
     # If get POST request from form
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).one()
+        user = User.query.filter_by(email=form.login.data).one()
         login_user(user, remember=form.remember_me.data)
         flash("You have been logged successfully", category="success")
         return redirect(url_for("main.home", page=1))
@@ -71,14 +72,13 @@ def registration():
 
     # If POST request from form
     if form.validate_on_submit():
-        new_user = User()
-        new_user.username = form.username.data
+        new_user = User(email=form.email.data, f_name=form.f_name.data)
         new_user.set_password(form.password.data)
         try:
             db.session.add(new_user)
             db.session.commit()
         except Exception as err:
-            flash("Something went wrong, try later")
+            flash(gettext("Something went wrong, try later"))
             redirect(url_for("main.home", page=1))
         return redirect(url_for(".login"))
     openid_errors = openid.fetch_error()

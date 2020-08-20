@@ -7,13 +7,13 @@
         <form method="post" action="{{ url_for('.login') }}">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                {{ form.username.label }}
-                {% if form.username.errors %}
-                    {% for error in form.username.errors %}
+                {{ form.login.label }}
+                {% if form.login.errors %}
+                    {% for error in form.login.errors %}
                         <p class="alert-warning">{{ error }}</p>
                     {% endfor %}
                 {% endif %}
-                {{ form.username(class_='form-control') }}
+                {{ form.login(class_='form-control') }}
             </div>
             <div class="form-group">
                 {{ form.password.label }}
@@ -30,15 +30,12 @@
             </div>
             <input class="btn btn-success" type="submit" value="{{ _('Login') }}">
         </form>
-        <h2 class="text-center">Register/Login With Twitter</h2>
-        <a href="{{ url_for('twitter.login') }}">Login</a>
         <h2 class="text-center">Register/Login With Facebook</h2>
         <a href="{{ url_for('facebook.login') }}">Login</a>
         <h2 class="text-center">Register/Login With GitHub</h2>
         <a href="{{ url_for('github.login') }}">Login</a>
         <div id="fb-root"></div>
     </div>
-
 </div>
 
 {% endblock %}
