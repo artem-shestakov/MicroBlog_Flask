@@ -5,7 +5,7 @@ from . import bcrypt
 
 class BlogAnonymus(AnonymousUserMixin):
     def __init__(self):
-        self.username = "Guest"
+        self.email = "Guest"
 
 
 roles = db.Table(
@@ -14,19 +14,24 @@ roles = db.Table(
     db.Column("role_id", db.Integer, db.ForeignKey("user_roles.id"))
 )
 
+
 # User model
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), nullable=False, unique=True)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    f_name = db.Column(db.String(255), nullable=False)
+    l_name = db.Column(db.String(255))
     password = db.Column(db.String(255))
+    about = db.Column(db.Text())
     posts = db.relationship("Post", backref="users", lazy="dynamic")
     roles = db.relationship("Role", secondary=roles, backref=db.backref("users", lazy="dynamic"))
 
-    def __init__(self, username):
-        default = Role.query.filter_by(name="default").one()
-        self.roles.append(default)
-        self.username = username
+    def __init__(self, email, f_name):
+        default_role = Role.query.filter_by(name="user").one()
+        self.roles.append(default_role)
+        self.email = email
+        self.f_name = f_name
 
     # Check user's role
     @cache.memoize(timeout=60)
@@ -36,7 +41,7 @@ class User(db.Model):
                 return True
         return False
 
-    # Block standart methods of Flask Login module
+    # Block standard methods of Flask Login module
     @property
     def is_authenticated(self):
         if isinstance(self, AnonymousUserMixin):
@@ -67,7 +72,7 @@ class User(db.Model):
         return bcrypt.check_password_hash(self.password, password)
 
     def __repr__(self):
-        return f"<User '{self.username}'>"
+        return f"<User '{self.email}'>"
 
 
 # Class for user's role
