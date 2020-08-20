@@ -66,7 +66,7 @@ class DevConfig(Config):
     #         'schedule': crontab(minute="*/1")
     #     },
     # }
-    SERVER_NAME = "127.0.0.1:5000"
+    SERVER_NAME = "0.0.0.0:5000"
     PREFERRED_URL_SCHEME = "http"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     SMTP_FROM = smtp_from
