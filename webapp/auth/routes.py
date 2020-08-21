@@ -37,7 +37,7 @@ def login():
 
     # If get POST request from form
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.login.data).one()
+        user = User.query.filter_by(email=form.email.data).one()
         login_user(user, remember=form.remember_me.data)
         flash("You have been logged successfully", category="success")
         return redirect(url_for("main.home", page=1))

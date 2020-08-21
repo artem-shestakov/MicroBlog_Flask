@@ -4,16 +4,37 @@
 {% block body %}
 <div class="row justify-content-center">
     <div class="col-lg-4">
-        <form method="post" action="{{ url_for('.login') }}">
+        <h1 class="text-center my-4">Login</h1>
+        <div class="text-center">
+            <ul class="list-unstyled">
+                <li class="my-2">
+                    <a class="btn btn-light btn-lg w-100" href="{{ url_for('github.login') }}" title="GitHub">{{ _('With') }}
+                        <i class="fab fa-github" aria-hidden="true"></i>
+                        <strong>GitHub</strong>
+                    </a>
+                </li>
+                <li class="my-2">
+                    <a class="btn btn-light btn-lg w-100" href="{{ url_for('facebook.login') }}" title="Facebook">{{ _('With') }}
+                        <i class="fab fa-facebook"></i>
+                        <strong>Facebook</strong>
+                    </a>
+                </li>
+            </ul>
+            <div class="text-center my-4">
+                <h5>{{ _('- or -') }}</h5>
+            </div>
+        </div>
+
+        <form class="login border rounded-lg my-4 p-4" method="post" action="{{ url_for('.login') }}">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                {{ form.login.label }}
-                {% if form.login.errors %}
-                    {% for error in form.login.errors %}
+                {{ form.email.label }}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
                         <p class="alert-warning">{{ error }}</p>
                     {% endfor %}
                 {% endif %}
-                {{ form.login(class_='form-control') }}
+                {{ form.email(class_='form-control') }}
             </div>
             <div class="form-group">
                 {{ form.password.label }}
@@ -28,13 +49,8 @@
                 {{ form.remember_me.label }}
                 {{ form.remember_me(class_='form-control') }}
             </div>
-            <input class="btn btn-success" type="submit" value="{{ _('Login') }}">
+            <input class="btn-lg btn-success w-100" type="submit" value="{{ _('Login') }}" style="background-color: #149feb; border-color: #149feb">
         </form>
-        <h2 class="text-center">Register/Login With Facebook</h2>
-        <a href="{{ url_for('facebook.login') }}">Login</a>
-        <h2 class="text-center">Register/Login With GitHub</h2>
-        <a href="{{ url_for('github.login') }}">Login</a>
-        <div id="fb-root"></div>
     </div>
 </div>
 

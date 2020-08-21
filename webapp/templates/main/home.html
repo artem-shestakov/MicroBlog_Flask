@@ -4,6 +4,7 @@
 
 
 {% block leftbody %}
+
 {{ macros.render_post(posts) }}
 {% endblock %}
 
@@ -13,4 +14,8 @@
 
 {% block pagination %}
 {{ macros.render_pagination(posts) }}
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}
