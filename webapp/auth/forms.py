@@ -18,11 +18,11 @@ class LoginForm(FlaskForm):
     """
     Form for login user
     """
-    login = StringField(_l("Login"), validators=[DataRequired(), Length(max=255)])
+    email = StringField(_l("E-mail"), validators=[DataRequired(), Length(max=255)])
     password = PasswordField(_l("Password"), validators=[DataRequired()])
     remember_me = BooleanField(_l("Remember me"))
 
-    # Override standart method of FlaskForm class
+    # Override standard method of FlaskForm class
     def validate(self):
         # Getting result from standart method of FlaskForm class
         check_validate = super(LoginForm, self).validate()
@@ -30,7 +30,7 @@ class LoginForm(FlaskForm):
             return False
 
         # Additional check user login and password
-        user = User.query.filter_by(email=self.login.data).first()
+        user = User.query.filter_by(email=self.email.data).first()
         if not user:
             self.email.errors.append(_("Invalid email or password"))
             return False

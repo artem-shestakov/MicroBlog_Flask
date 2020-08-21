@@ -10,6 +10,7 @@ from webapp import db
 from flask_jwt_extended import JWTManager
 from functools import update_wrapper
 from pymysql import OperationalError
+from flask_babel import gettext as _
 
 
 # Create LoginManager object
@@ -115,17 +116,24 @@ def create_or_login(resp: OpenIDResponse):
 @oauth_authorized.connect
 def logged_in(blueprint, token):
     from .models import User
-    if blueprint.name == "twitter":
-        username = session.get("twitter_oauth_token").get("screen_name")
-    elif blueprint.name == "facebook":
+    if blueprint.name == "facebook":
         resp = facebook.get("/me")
-        username = resp.json()["name"]
+        print(resp.text)
+        f_name = resp.json()["name"]
     elif blueprint.name == "github":
         resp = github.get("/user")
-        username = resp.json()["login"]
-    user = User.query.filter_by(username=username).first()
+        resp2 = blueprint.session.get("/user")
+        print(resp2.text)
+        email = resp.json()["email"]
+        print(">>>>>>>", email)
+        if email is None:
+            flash(_("Can not get your email. Please select Public email on the Public profile page of you account"),
+                  category="warning")
+            return ""
+        f_name = resp.json()["name"]
+    user = User.query.filter_by(email=email, f_name=f_name).first()
     if not user:
-        user = User(username=username)
+        user = User(email=email, f_name=f_name)
         try:
             db.session.add(user)
             db.session.commit()
@@ -133,4 +141,4 @@ def logged_in(blueprint, token):
             print(err)
     login_user(user)
     g.user = user
-    flash("You have been logged in.", category="success")
+    flash(_("You have been logged in."), category="success")
