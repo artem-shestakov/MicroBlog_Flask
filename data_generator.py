@@ -10,10 +10,10 @@ fake_roles = ["user", "author", "administrator"]
 
 # Test users
 fake_users = [
-    {"email": "user01@user01.com", "f_name": "User01","role": 'user'},
-    {"email": "author01@author01.com", "f_name": "Author01", "role": "author"},
-    {"email": "author02@author02.com", "f_name": "Author02", "role": "author"},
-    {"email": "admin01@admin01.com", "f_name": "Admin01", "role": "administrator"}
+    {"email": "user01@user01.com", "f_name": "User01","role": 'user', "account_type": "webblog"},
+    {"email": "author01@author01.com", "f_name": "Author01", "role": "author", "account_type": "webblog"},
+    {"email": "author02@author02.com", "f_name": "Author02", "role": "author", "account_type": "webblog"},
+    {"email": "admin01@admin01.com", "f_name": "Admin01", "role": "administrator", "account_type": "webblog"}
     ]
 
 Faker.seed(0)
@@ -28,7 +28,7 @@ def user_generator():
         if user:
             users.append(user)
             continue
-        user = User(email=fake_user["email"], f_name=fake_user["f_name"])
+        user = User(email=fake_user["email"], f_name=fake_user["f_name"], account_type=fake_user["account_type"])
         role = Role.query.filter_by(name=fake_user["role"]).first()
         user.roles.append(role)
         user.password = bcrypt.generate_password_hash("12345678")

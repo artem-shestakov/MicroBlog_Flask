@@ -46,12 +46,14 @@ def create_module(app, **kwargs):
 
     facebook_blueprint = make_facebook_blueprint(
         client_id=app.config.get("FACEBOOK_CLIENT_ID"),
-        client_secret=app.config.get("FACEBOOK_CLIENT_SECRET")
+        client_secret=app.config.get("FACEBOOK_CLIENT_SECRET"),
+        scope=["email"]
     )
 
     github_blueprint = make_github_blueprint(
         client_id=app.config.get("GITHUB_CLIENT_ID"),
-        client_secret=app.config.get("GITHUB_CLIENT_SECRET")
+        client_secret=app.config.get("GITHUB_CLIENT_SECRET"),
+        scope=["user:email"]
     )
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
@@ -117,27 +119,24 @@ def create_or_login(resp: OpenIDResponse):
 def logged_in(blueprint, token):
     from .models import User
     if blueprint.name == "facebook":
-        resp = facebook.get("/me")
-        print(resp.text)
-        f_name = resp.json()["name"]
-    elif blueprint.name == "github":
-        resp = github.get("/user")
-        resp2 = blueprint.session.get("/user")
-        print(resp2.text)
+        resp = facebook.get("/me?fields=name,first_name,email")
         email = resp.json()["email"]
-        print(">>>>>>>", email)
-        if email is None:
-            flash(_("Can not get your email. Please select Public email on the Public profile page of you account"),
-                  category="warning")
-            return ""
-        f_name = resp.json()["name"]
-    user = User.query.filter_by(email=email, f_name=f_name).first()
+        f_name = resp.json()["first_name"]
+        account_type = "facebook"
+    elif blueprint.name == "github":
+        user_info = github.get("/user")
+        user_email = github.get("/user/emails")
+        email = user_email.json()[0]["email"]
+        f_name = user_info.json()["name"]
+        account_type = "github"
+    user = User.query.filter_by(email=email).first()
     if not user:
-        user = User(email=email, f_name=f_name)
+        user = User(email=email, f_name=f_name, account_type=account_type)
         try:
             db.session.add(user)
             db.session.commit()
         except Exception as err:
+            db.session.rollback()
             print(err)
     login_user(user)
     g.user = user
