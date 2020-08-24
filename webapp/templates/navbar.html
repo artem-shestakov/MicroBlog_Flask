@@ -36,6 +36,11 @@
                 <a class="nav-link dropdown-toggle" style="color: #000000" href="#"
                 id="navbarDropdown" role="button" data-toggle="dropdown">
                     <i class="fas fa-globe"></i>
+                    {% if session['locale'] == 'en' %}
+                        {{ _('Eng') }}
+                    {% elif session['locale'] == 'ru' %}
+                        {{ _('Rus') }}
+                    {% endif %}
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" style="color: #000000" href="{{url_for('babel.index',

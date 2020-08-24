@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-19 14:15+0300\n"
+"POT-Creation-Date: 2020-08-24 13:46+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,32 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: webapp/auth/forms.py:13
+#: webapp/auth/__init__.py:161
+msgid "You have been logged in."
+msgstr ""
+
+#: webapp/auth/forms.py:14
 msgid "OpenID"
 msgstr ""
 
-#: webapp/auth/forms.py:20 webapp/auth/forms.py:48
-msgid "Username"
+#: webapp/auth/forms.py:21
+msgid "E-mail"
 msgstr ""
 
-#: webapp/auth/forms.py:21 webapp/auth/forms.py:49
+#: webapp/auth/forms.py:22 webapp/auth/forms.py:50
 msgid "Password"
 msgstr ""
 
-#: webapp/auth/forms.py:22
+#: webapp/auth/forms.py:23
 msgid "Remember me"
 msgstr ""
 
-#: webapp/auth/forms.py:34 webapp/auth/forms.py:38
-msgid "Invalid username or password"
+#: webapp/auth/forms.py:35 webapp/auth/forms.py:39
+msgid "Invalid email or password"
 msgstr ""
 
-#: webapp/auth/forms.py:50
+#: webapp/auth/forms.py:49
+msgid "E-Mail"
+msgstr ""
+
+#: webapp/auth/forms.py:51
 msgid "Confirm password"
 msgstr ""
 
-#: webapp/auth/forms.py:63
-msgid "User with this name already exists"
+#: webapp/auth/forms.py:52
+msgid "First name"
+msgstr ""
+
+#: webapp/auth/forms.py:53
+msgid "Last name"
+msgstr ""
+
+#: webapp/auth/forms.py:66
+msgid "User with this email already exists"
+msgstr ""
+
+#: webapp/auth/routes.py:81
+msgid "Something went wrong, try later"
 msgstr ""
 
 #: webapp/posts/forms.py:9
@@ -85,38 +105,64 @@ msgstr ""
 msgid "Oops, we have some error (:"
 msgstr ""
 
-#: webapp/templates/navbar.html:6
+#: webapp/templates/navbar.html:12
 msgid "Home"
 msgstr ""
 
-#: webapp/templates/navbar.html:10
+#: webapp/templates/navbar.html:15
+msgid "About"
+msgstr ""
+
+#: webapp/templates/navbar.html:19
 msgid "Admin"
 msgstr ""
 
-#: webapp/templates/navbar.html:18
-msgid "Lang"
+#: webapp/templates/navbar.html:24
+msgid "Search"
 msgstr ""
 
-#: webapp/templates/navbar.html:31
+#: webapp/templates/navbar.html:40
+msgid "Eng"
+msgstr ""
+
+#: webapp/templates/navbar.html:42
+msgid "Rus"
+msgstr ""
+
+#: webapp/templates/navbar.html:56
 #, python-format
 msgid "Hello %(username)s"
 msgstr ""
 
-#: webapp/templates/navbar.html:34
+#: webapp/templates/navbar.html:59
 msgid "Logout"
 msgstr ""
 
-#: webapp/templates/auth/registration.html:3 webapp/templates/navbar.html:38
-msgid "Registration"
+#: webapp/templates/navbar.html:63
+msgid "Sign up"
 msgstr ""
 
-#: webapp/templates/auth/login.html:2 webapp/templates/auth/login.html:31
-#: webapp/templates/navbar.html:41
+#: webapp/templates/auth/login.html:2 webapp/templates/auth/login.html:7
+#: webapp/templates/navbar.html:66
+msgid "Sign In"
+msgstr ""
+
+#: webapp/templates/auth/login.html:28
+#: webapp/templates/auth/registration.html:29
+msgid "- or -"
+msgstr ""
+
+#: webapp/templates/auth/login.html:58
 msgid "Login"
 msgstr ""
 
-#: webapp/templates/auth/registration.html:41
-msgid "Register"
+#: webapp/templates/auth/registration.html:3
+msgid "Registration"
+msgstr ""
+
+#: webapp/templates/auth/registration.html:8
+#: webapp/templates/auth/registration.html:86
+msgid "Sign Up"
 msgstr ""
 
 #: webapp/templates/posts/edit.html:2

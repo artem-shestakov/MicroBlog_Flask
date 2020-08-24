@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-19 14:15+0300\n"
+"POT-Creation-Date: 2020-08-24 13:46+0300\n"
 "PO-Revision-Date: 2020-08-19 12:49+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,41 +19,61 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: webapp/auth/forms.py:13
+#: webapp/auth/__init__.py:161
+msgid "You have been logged in."
+msgstr "Вы вошли на сайт"
+
+#: webapp/auth/forms.py:14
 msgid "OpenID"
-msgstr "OpenID"
+msgstr ""
 
-#: webapp/auth/forms.py:20 webapp/auth/forms.py:48
-msgid "Username"
-msgstr "Пользователь"
+#: webapp/auth/forms.py:21
+msgid "E-mail"
+msgstr "Почта(E-mail)"
 
-#: webapp/auth/forms.py:21 webapp/auth/forms.py:49
+#: webapp/auth/forms.py:22 webapp/auth/forms.py:50
 msgid "Password"
 msgstr "Пароль"
 
-#: webapp/auth/forms.py:22
+#: webapp/auth/forms.py:23
 msgid "Remember me"
 msgstr "Запомнить меня"
 
-#: webapp/auth/forms.py:34 webapp/auth/forms.py:38
-msgid "Invalid username or password"
-msgstr "Неверный логин или пароль"
+#: webapp/auth/forms.py:35 webapp/auth/forms.py:39
+msgid "Invalid email or password"
+msgstr "Неверно указана почта или пароль"
 
-#: webapp/auth/forms.py:50
+#: webapp/auth/forms.py:49
+msgid "E-Mail"
+msgstr "Почта(E-mail)"
+
+#: webapp/auth/forms.py:51
 msgid "Confirm password"
-msgstr "Подтверждение пароля"
+msgstr "Подтвердите пароль"
 
-#: webapp/auth/forms.py:63
-msgid "User with this name already exists"
-msgstr "Пользователь с таким логином уже существует"
+#: webapp/auth/forms.py:52
+msgid "First name"
+msgstr "Имя"
+
+#: webapp/auth/forms.py:53
+msgid "Last name"
+msgstr "Фамилия"
+
+#: webapp/auth/forms.py:66
+msgid "User with this email already exists"
+msgstr "Пользоватеь с такой электройнной почтой уже существует"
+
+#: webapp/auth/routes.py:81
+msgid "Something went wrong, try later"
+msgstr "Что-то пошло не так, попробуйте позже"
 
 #: webapp/posts/forms.py:9
 msgid "Name"
-msgstr "Название"
+msgstr "Имя"
 
 #: webapp/posts/forms.py:10
 msgid "Comment"
-msgstr "Текст комментария"
+msgstr "Комментарий"
 
 #: webapp/posts/forms.py:14
 msgid "Title"
@@ -87,38 +107,64 @@ msgstr "ОШИБКА 500"
 msgid "Oops, we have some error (:"
 msgstr "Упс, кажется у нас ошибка "
 
-#: webapp/templates/navbar.html:6
+#: webapp/templates/navbar.html:12
 msgid "Home"
 msgstr "Главная страница"
 
-#: webapp/templates/navbar.html:10
+#: webapp/templates/navbar.html:15
+msgid "About"
+msgstr "О нас"
+
+#: webapp/templates/navbar.html:19
 msgid "Admin"
 msgstr "Администратор"
 
-#: webapp/templates/navbar.html:18
-msgid "Lang"
-msgstr "Язык"
+#: webapp/templates/navbar.html:24
+msgid "Search"
+msgstr "Поиск"
 
-#: webapp/templates/navbar.html:31
+#: webapp/templates/navbar.html:40
+msgid "Eng"
+msgstr "Англ"
+
+#: webapp/templates/navbar.html:42
+msgid "Rus"
+msgstr "Рус"
+
+#: webapp/templates/navbar.html:56
 #, python-format
 msgid "Hello %(username)s"
 msgstr "Привет %(username)s"
 
-#: webapp/templates/navbar.html:34
+#: webapp/templates/navbar.html:59
 msgid "Logout"
 msgstr "Выход"
 
-#: webapp/templates/auth/registration.html:3 webapp/templates/navbar.html:38
-msgid "Registration"
+#: webapp/templates/navbar.html:63
+msgid "Sign up"
 msgstr "Регистрация"
 
-#: webapp/templates/auth/login.html:2 webapp/templates/auth/login.html:31
-#: webapp/templates/navbar.html:41
+#: webapp/templates/auth/login.html:2 webapp/templates/auth/login.html:7
+#: webapp/templates/navbar.html:66
+msgid "Sign In"
+msgstr "Войти"
+
+#: webapp/templates/auth/login.html:28
+#: webapp/templates/auth/registration.html:29
+msgid "- or -"
+msgstr "- или -"
+
+#: webapp/templates/auth/login.html:58
 msgid "Login"
 msgstr "Войти"
 
-#: webapp/templates/auth/registration.html:41
-msgid "Register"
+#: webapp/templates/auth/registration.html:3
+msgid "Registration"
+msgstr "Регистрация"
+
+#: webapp/templates/auth/registration.html:8
+#: webapp/templates/auth/registration.html:86
+msgid "Sign Up"
 msgstr "Регистрация"
 
 #: webapp/templates/posts/edit.html:2
@@ -184,4 +230,43 @@ msgstr "Посты пользователя %(username)s"
 
 #~ msgid "%(name)s"
 #~ msgstr ""
+
+#~ msgid "OpenID"
+#~ msgstr "OpenID"
+
+#~ msgid "Username"
+#~ msgstr "Пользователь"
+
+#~ msgid "Password"
+#~ msgstr "Пароль"
+
+#~ msgid "Remember me"
+#~ msgstr "Запомнить меня"
+
+#~ msgid "Invalid username or password"
+#~ msgstr "Неверный логин или пароль"
+
+#~ msgid "Confirm password"
+#~ msgstr "Подтверждение пароля"
+
+#~ msgid "User with this name already exists"
+#~ msgstr "Пользователь с таким логином уже существует"
+
+#~ msgid "Name"
+#~ msgstr "Название"
+
+#~ msgid "Comment"
+#~ msgstr "Текст комментария"
+
+#~ msgid "Title"
+#~ msgstr "Название"
+
+#~ msgid "Content"
+#~ msgstr "Содержание"
+
+#~ msgid "Lang"
+#~ msgstr "Язык"
+
+#~ msgid "Register"
+#~ msgstr "Регистрация"
 
