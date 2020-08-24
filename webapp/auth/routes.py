@@ -78,7 +78,7 @@ def registration():
             db.session.add(new_user)
             db.session.commit()
         except Exception as err:
-            flash(gettext("Something went wrong, try later"))
+            flash(gettext("Something went wrong, try later"), category="danger")
             redirect(url_for("main.home", page=1))
         return redirect(url_for(".login"))
     openid_errors = openid.fetch_error()

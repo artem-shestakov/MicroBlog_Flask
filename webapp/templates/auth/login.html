@@ -1,25 +1,29 @@
 {% extends 'base.html' %}
-{% block title %}{{ _('Login') }}{% endblock %}
+{% block title %}{{ _('Sign In') }}{% endblock %}
 
 {% block body %}
 <div class="row justify-content-center">
     <div class="col-lg-4">
-        <h1 class="text-center my-4">Login</h1>
+        <h1 class="text-center my-4">{{ _('Sign In') }}</h1>
         <div class="text-center">
-            <ul class="list-unstyled">
-                <li class="my-2">
-                    <a class="btn btn-light btn-lg w-100" href="{{ url_for('github.login') }}" title="GitHub">{{ _('With') }}
-                        <i class="fab fa-github" aria-hidden="true"></i>
-                        <strong>GitHub</strong>
+            <ul class="list-unstyled list-group list-group-horizontal justify-content-center">
+                 <li class="mx-2">
+                    <a class="btn btn-light btn-lg" href="{{ url_for('facebook.login') }}" title="Facebook">
+                        <i class="fab fa-facebook"></i>
                     </a>
                 </li>
-                <li class="my-2">
-                    <a class="btn btn-light btn-lg w-100" href="{{ url_for('facebook.login') }}" title="Facebook">{{ _('With') }}
-                        <i class="fab fa-facebook"></i>
-                        <strong>Facebook</strong>
+                <li class="mx-2">
+                    <a class="btn btn-light btn-lg" href="{{ url_for('github.login') }}" title="GitHub">
+                        <i class="fab fa-github" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="mx-2">
+                    <a class="btn btn-light btn-lg" href="{{ url_for('gitlab.login') }}" title="GitLab">
+                        <i class="fab fa-gitlab"></i>
                     </a>
                 </li>
             </ul>
+
             <div class="text-center my-4">
                 <h5>{{ _('- or -') }}</h5>
             </div>
@@ -45,11 +49,13 @@
                 {% endif %}
                 {{ form.password(class_='form-control') }}
             </div>
-            <div class="form-group">
-                {{ form.remember_me.label }}
-                {{ form.remember_me(class_='form-control') }}
-            </div>
-            <input class="btn-lg btn-success w-100" type="submit" value="{{ _('Login') }}" style="background-color: #149feb; border-color: #149feb">
+                <div class="form-group">
+                    <div class="form-check form-check-inline">
+                        {{ form.remember_me.label }}
+                        {{ form.remember_me(class_='form-check-input mx-2') }}
+                    </div>
+                </div>
+            <input class="btn-lg btn-success w-100" type="submit" value="{{ _('Login') }}" style="background-color: #149fec; border-color: #149fec">
         </form>
     </div>
 </div>

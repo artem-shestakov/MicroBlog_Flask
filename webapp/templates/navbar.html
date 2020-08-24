@@ -22,20 +22,20 @@
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input type="text" class="form-control mr-sm-2" placeholder="{{ _('Search') }}" aria-label="Search">
-            <button class="btn my-2 my-sm-0"
-                    onmouseover="this.style.backgroundColor='#d5d5d5'"
-                    onmouseout="this.style.backgroundColor='#ffffff';"
-                    style="
-                    background-color: white;
-                    color: #000000;
-                    border: 1px solid #000000;
-                    transition-duration: 0.4s;">{{ _('Search') }}</button>
+{#            <button class="btn my-2 my-sm-0"#}
+{#                    onmouseover="this.style.backgroundColor='#d5d5d5'"#}
+{#                    onmouseout="this.style.backgroundColor='#ffffff';"#}
+{#                    style="#}
+{#                    background-color: white;#}
+{#                    color: #000000;#}
+{#                    border: 1px solid #000000;#}
+{#                    transition-duration: 0.4s;">{{ _('Search') }}</button>#}
         </form>
         <ul class="navbar-nav justify-content-end">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" style="color: #000000" href="#"
                 id="navbarDropdown" role="button" data-toggle="dropdown">
-                    {{ _('Lang') }}
+                    <i class="fas fa-globe"></i>
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" style="color: #000000" href="{{url_for('babel.index',
@@ -58,7 +58,7 @@
                 <a class="nav-link" style="color: #000000" href="{{ url_for('auth.registration') }}">{{ _('Sign up') }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" style="color: #000000" href="{{ url_for('auth.login')}}">{{ _('Login') }}</a>
+                <a class="nav-link" style="color: #000000" href="{{ url_for('auth.login')}}">{{ _('Sign In') }}</a>
             </li>
         {% endif %}
             </ul>

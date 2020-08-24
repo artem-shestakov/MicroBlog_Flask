@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.contrib.github import make_github_blueprint, github
+from flask_dance.contrib.gitlab import make_gitlab_blueprint, gitlab
 from flask_dance.consumer import oauth_authorized
 from flask_openid import OpenIDResponse
 from flask import session, g, flash, redirect, url_for, abort, current_app
@@ -11,6 +12,8 @@ from flask_jwt_extended import JWTManager
 from functools import update_wrapper
 from pymysql import OperationalError
 from flask_babel import gettext as _
+from sqlalchemy import event
+from .tasks import welcome_sender
 
 
 # Create LoginManager object
@@ -39,6 +42,7 @@ def load_user(user_id):
 
 # Init objects and register blueprint
 def create_module(app, **kwargs):
+    from .models import User
     login_manager.init_app(app)
     bcrypt.init_app(app)
     openid.init_app(app)
@@ -55,10 +59,19 @@ def create_module(app, **kwargs):
         client_secret=app.config.get("GITHUB_CLIENT_SECRET"),
         scope=["user:email"]
     )
+
+    gitlab_blueprint = make_gitlab_blueprint(
+        client_id=app.config.get("GITLAB_CLIENT_ID"),
+        client_secret=app.config.get("GITLAB_CLIENT_SECRET"),
+        scope=["read_user email"]
+    )
     from .routes import auth_blueprint
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(facebook_blueprint, url_prefix="/auth/login")
     app.register_blueprint(github_blueprint, url_prefix="/auth/login")
+    app.register_blueprint(gitlab_blueprint, url_prefix="/auth/login")
+
+    event.listen(User, "after_insert", welcome_sender)
 
 
 # Decorator function for checkin user's role
@@ -129,6 +142,11 @@ def logged_in(blueprint, token):
         email = user_email.json()[0]["email"]
         f_name = user_info.json()["name"]
         account_type = "github"
+    elif blueprint.name == "gitlab":
+        resp = gitlab.get("user")
+        email = resp.json()["email"]
+        f_name = resp.json()["name"].split()[0]
+        account_type = "gitlab"
     user = User.query.filter_by(email=email).first()
     if not user:
         user = User(email=email, f_name=f_name, account_type=account_type)
