@@ -24,16 +24,15 @@ class User(db.Model):
     l_name = db.Column(db.String(255))
     password = db.Column(db.String(255))
     about = db.Column(db.Text())
-    account_type = db.Column(db.String(25), nullable=False)
+    account_type = db.Column(db.String(25), nullable=False, default="local")
     posts = db.relationship("Post", backref="users", lazy="dynamic")
     roles = db.relationship("Role", secondary=roles, backref=db.backref("users", lazy="dynamic"))
 
-    def __init__(self, email, f_name, account_type):
+    def __init__(self, email, f_name):
         default_role = Role.query.filter_by(name="user").one()
         self.roles.append(default_role)
         self.email = email
         self.f_name = f_name
-        self.account_type = account_type
 
     # Check user's role
     @cache.memoize(timeout=60)

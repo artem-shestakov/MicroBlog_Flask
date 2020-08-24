@@ -13,12 +13,16 @@ fb_client_id = os.getenv("FACEBOOK_CLIENT_ID")
 fb_client_secret = os.getenv("FACEBOOK_CLIENT_SECRET")
 github_client_id = os.getenv("GITHUB_CLIENT_ID")
 github_client_secret = os.getenv("GITHUB_CLIENT_SECRET")
+gitlab_client_id = os.getenv("GITLAB_CLIENT_ID")
+gitlab_client_secret = os.getenv("GITLAB_CLIENT_SECRET")
 rabbitmq_user = os.getenv("RABBITMQ_DEFAULT_USER")
 rabbitmq_user_password = os.getenv("RABBITMQ_DEFAULT_PASS")
 smtp_from = os.getenv("SMTP_FROM")
 smtp_server = os.getenv("SMTP_SERVER")
 smtp_user = os.getenv("SMTP_USER")
 smtp_pass = os.getenv("SMTP_PASS")
+
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
 
 class Config(object):
@@ -81,11 +85,14 @@ class DevConfig(Config):
     RECAPTCHA_PRIVATE_KEY = f"{recaptcha_private_key}"
     PROPAGATE_EXCEPTIONS = True
     POSTS_PER_PAGE = 10
+    OAUTHLIB_RELAX_TOKEN_SCOPE = 1
     TWITTER_API_KEY = f"{tw_api_key}"
     TWITTER_API_SECRET = f"{tw_api_secret}"
     FACEBOOK_CLIENT_ID = f"{fb_client_id}"
     FACEBOOK_CLIENT_SECRET = f"{fb_client_secret}"
     GITHUB_CLIENT_ID = f"{github_client_id}"
     GITHUB_CLIENT_SECRET = f"{github_client_secret}"
+    GITLAB_CLIENT_ID = f"{gitlab_client_id}"
+    GITLAB_CLIENT_SECRET = f"{gitlab_client_secret}"
 
 
