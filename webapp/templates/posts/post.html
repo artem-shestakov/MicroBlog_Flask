@@ -4,12 +4,23 @@
 
 {% block leftbody %}
 <div class="row">
-    <div class="col bg-light">
+    <div class="col">
         <div class="row">
             <h1>{{ post.title }}</h1>
         </div>
-        <div>
-            {{ post.text | safe }}
+        {% if post.youtube_id %}
+            <div class="row">
+                <div class="col">
+                    {{ youtube(post.youtube_id) }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div>
+                <div class="col">
+                    {{ post.text | safe }}
+                </div>
+            </div>
         </div>
         <a class="btn btn-outline-warning" role="button" aria-pressed="true" href="{{ url_for('.edit_post', post_id=post.id) }}">{{ _('Edit') }}</a>
     </div>

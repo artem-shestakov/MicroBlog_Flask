@@ -13,3 +13,4 @@ class CommentForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField(_l("Title"), validators=[DataRequired(), Length(max=255)])
     text = TextAreaField(_l("Content"), validators=[DataRequired()])
+    youtube_id = StringField(_l("YouTube video ID"), validators=[Length(max=20)])
