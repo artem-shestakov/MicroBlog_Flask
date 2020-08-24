@@ -1,13 +1,11 @@
 import unittest
 from webapp import create_app, db
-from webapp.admin import admin
 from webapp.api import rest_api
 
 
 class TestURL(unittest.TestCase):
 
     def setUp(self):
-        admin._views = []
         rest_api.resources = []
 
         app = create_app("config.TestConfig")
