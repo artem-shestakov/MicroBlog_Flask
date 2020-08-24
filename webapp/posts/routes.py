@@ -40,7 +40,12 @@ def page_not_found(error):
     return render_template('403.html'), 403
 
 
-@posts_blueprint.route('/post/<int:post_id>', methods=('GET', 'POST'))
+@posts_blueprint.route("/")
+def go_home():
+    return redirect(url_for("main.home"))
+
+
+@posts_blueprint.route('/<int:post_id>', methods=('GET', 'POST'))
 @cache.cached(timeout=60, key_prefix=make_chache_key)
 def get_post(post_id):
     form = CommentForm()
