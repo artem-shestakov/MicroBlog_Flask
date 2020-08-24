@@ -77,6 +77,7 @@ def new_post():
         new_post = Post()
         new_post.title = form.title.data
         new_post.text = form.text.data
+        new_post.youtube_id = form.youtube_id.data
         new_post.user_id = current_user.id
         db.session.add(new_post)
         db.session.commit()
@@ -95,6 +96,7 @@ def edit_post(post_id):
         if form.validate_on_submit():
             post.title = form.title.data
             post.text = form.text.data
+            new_post.youtube_id = form.youtube_id.data
             post.publish_date = datetime.now()
             db.session.merge(post)
             db.session.commit()
