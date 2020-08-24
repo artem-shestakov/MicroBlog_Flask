@@ -1,16 +1,18 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_celery import Celery
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_caching import Cache
-from flask_assets import Bundle, Environment
+from flask_youtube.youtube import YouTube
 
 db = SQLAlchemy()
 migrate = Migrate()
 celery = Celery()
 debugtoolbar = DebugToolbarExtension()
 cache = Cache()
+yt = YouTube()
+
 # assets_app = Environment()
 
 # css_bundle = Bundle(
@@ -43,6 +45,7 @@ def create_app(config_object):
 
     debugtoolbar.init_app(app)
     cache.init_app(app)
+    yt.init_app(app)
     # assets_app.init_app(app)
     # assets_app.register("css_app", css_bundle)
     # assets_app.register("js_app", js_bundle)
