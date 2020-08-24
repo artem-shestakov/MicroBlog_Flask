@@ -3,11 +3,9 @@ from .routes import StatisticView, DBView, PostView, FileAdmin
 from webapp.auth.models import User, db
 from webapp.posts.models import Post
 
-admin = Admin()
-
 
 def create_module(app, **kwargs):
-    admin.init_app(app)
+    admin = Admin(app)
     admin.add_view(StatisticView(name="Statistic"))
     admin.add_view(FileAdmin(app.static_folder, "/static", name="Static Files"))
 
