@@ -92,14 +92,14 @@ def registration():
 def api():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
-    username = request.json.get("username", None)
+    email = request.json.get("email", None)
     password = request.json.get("password", None)
-    if not username:
-        return jsonify({"msg": "Missing <username> parameter"}), 400
+    if not email:
+        return jsonify({"msg": "Missing <email> parameter"}), 400
     if not password:
-        return jsonify({"msg": "Missing <password> parameter"})
-    user = authenticate(username=username, password=password)
+        return jsonify({"msg": "Missing <password> parameter"}), 400
+    user = authenticate(email=email, password=password)
     if not user:
-        return jsonify({"msg": "Bad password or username"})
+        return jsonify({"msg": "Bad password or username"}), 401
     access_token = create_access_token(identity=user.id)
     return jsonify(access_token=access_token), 200
