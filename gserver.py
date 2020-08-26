@@ -1,11 +1,13 @@
 from gevent import monkey; monkey.patch_all()
 
+import os
 from gevent.pywsgi import WSGIServer
 from webapp import create_app
 from webapp.cli import register
 
 # Create app object
-app = create_app("config.ProdConfig")
+env = os.environ.get("WEBAPP_ENV", "dev")
+app = create_app(f"config.{env.capitalize()}Config")
 register(app)
 
 # Run Gevent server
