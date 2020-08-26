@@ -8,5 +8,5 @@ app = create_app(f"config.{env.capitalize()}Config")
 register(app)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, ssl_context='adhoc')
-    # app.run(host="0.0.0.0", port=5000, threaded=True)
+    # app.run(host="0.0.0.0", port=5000, ssl_context='adhoc')
+    app.run(host="0.0.0.0", port=3000, threaded=True)

@@ -8,12 +8,12 @@ services:
     image: "rabbitmq:3-management"
     environment:
       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
       RABBITMQ_DEFAULT_VHOST: "/"
     ports:
       - "15672:15672"
       - "5672:5672"
+    env_file:
+      - .env
   db:
     image: mysql
     ports:
@@ -24,6 +24,29 @@ services:
     - type: volume
       source: webblog_dev
       target: /var/lib/mysql
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile_worker
+    depends_on:
+      - db
+      - rabbitmq
+    env_file:
+      - .env
+  app:
+    build:
+      context: .
+    environment:
+      WEBAPP_ENV: Dev
+      OAUTHLIB_INSECURE_TRANSPORT: 1
+    ports:
+    - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
 
 volumes:
   webblog_dev:
