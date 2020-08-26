@@ -3,4 +3,4 @@ WORKDIR /app
 ADD . /app
 RUN pip install -r requirements.txt
 EXPOSE 3000
-CMD ["uwsgi", "wsgi.ini"]
+CMD ["python3", "gserver.py"]
