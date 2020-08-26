@@ -3,9 +3,13 @@ from webapp import create_app, db
 from webapp.auth.models import Role, User
 import json
 
+
 class TestURL(unittest.TestCase):
 
     def setUp(self):
+        """
+        Create temp application and database in memory for tests
+        """
         app = create_app("config.TestConfig")
         app.config["WTF_CSRF_ENABLED"] = False
         self.client = app.test_client()
@@ -13,9 +17,14 @@ class TestURL(unittest.TestCase):
         db.create_all()
 
     def tearDown(self):
+        """Close connection to database"""
+
         db.session.remove()
 
     def _insert_user(self, email, f_name, password, role):
+        """Create role and user"""
+
+
         test_role = Role(role)
         db.session.add(test_role)
         db.session.commit()
@@ -95,6 +104,7 @@ class TestURL(unittest.TestCase):
 
     def test_api_fail_jwt_login(self):
         """Test API JWT fail login"""
+
         headers = {
             "Content-type": "application/json"
         }

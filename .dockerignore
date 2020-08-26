@@ -8,8 +8,12 @@ README.md
 .gitignore
 .env
 docker-compose.yml
+docker-compose.yml.dev
 venv
 .git
 .idea
+db
+*.log
+.coverage
 
 
