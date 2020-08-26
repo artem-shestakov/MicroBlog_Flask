@@ -5,7 +5,7 @@ from webapp import create_app
 from webapp.cli import register
 
 # Create app object
-app = create_app("config.DevConfig")
+app = create_app("config.ProdConfig")
 register(app)
 
 # Run Gevent server
