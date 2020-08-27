@@ -33,20 +33,6 @@ services:
       - rabbitmq
     env_file:
       - .env
-  app:
-    build:
-      context: .
-    environment:
-      WEBAPP_ENV: Dev
-      OAUTHLIB_INSECURE_TRANSPORT: 1
-    ports:
-    - "3000:3000"
-    env_file:
-      - .env
-    depends_on:
-      - db
-      - rabbitmq
-      - redis
 
 volumes:
   webblog_dev:
