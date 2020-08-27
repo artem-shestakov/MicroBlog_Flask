@@ -3,11 +3,19 @@ RUN apt-get update && \
     apt-get install -y supervisor python3-pip python3-dev libmysqlclient-dev mysql-client
 
 WORKDIR /worker
-COPY . .
-RUN pip3 install -r requirements.txt
 
+COPY run.py ./
+COPY celery-runner.py ./
+COPY ./flask_youtube ./flask_youtube
+COPY ./babel ./babel
 COPY ./worker/supervisord.conf /etc/supervisor/supervisord.conf
 COPY ./worker/celery_worker.conf /etc/supervisor/conf.d/celery_worker.conf
+
+COPY requirements.txt ./
+RUN pip3 install -r requirements.txt
+
 COPY ./worker/entrypoint.sh /worker
+COPY config.py ./
+COPY ./webapp ./webapp
 
 ENTRYPOINT ["sh", "entrypoint.sh"]
