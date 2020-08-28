@@ -31,6 +31,8 @@ services:
     depends_on:
       - db
       - rabbitmq
+    environment:
+      WEBAPP_ENV: Prod
     env_file:
       - .env
 
