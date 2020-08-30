@@ -1,13 +1,14 @@
 from flask import current_app, render_template
 from webapp import celery
 from email.mime.text import MIMEText
+from .utils import generate_confirm_token
 import smtplib
 
 
 @celery.task(bind=True, ignore_result=True, default_retry_dalay=300, max_retries=5)
-def you_are_welcome(self, email):
+def you_are_welcome(self, email, token):
     with current_app.app_context():
-        msg = MIMEText(render_template("welcome.html", user=self), "html")
+        msg = MIMEText(render_template("welcome.html", user=self, token=token), "html")
     msg["Subject"] = "Welcome from Web Blog"
     msg["From"] = "Web Blog"
     msg["To"] = email
@@ -24,4 +25,5 @@ def you_are_welcome(self, email):
 
 
 def welcome_sender(mapper, connection, self):
-    you_are_welcome.apply_async(args=(self.email,))
+    token = generate_confirm_token(self.email)
+    you_are_welcome.apply_async(args=(self.email, token,))

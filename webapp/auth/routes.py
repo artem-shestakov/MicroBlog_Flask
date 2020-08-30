@@ -4,8 +4,10 @@ from flask_jwt_extended import create_access_token
 from .forms import RegistrationForm, LoginForm, OpenIDForm
 from . import openid, authenticate
 from .models import User
+from .utils import confirm_token, generate_confirm_token
 from webapp import db
 from flask_babel import gettext
+from datetime import datetime
 
 # Init Blueprint
 auth_blueprint = Blueprint(
@@ -85,6 +87,28 @@ def registration():
     if openid_errors:
         flash(openid_errors, category="danger")
     return render_template("registration.html", form=form)
+
+
+# URL for email confirmation
+@auth_blueprint.route("/email-confirm/<token>")
+def email_confirm(token):
+    try:
+        email = confirm_token(token)
+        if email is False:
+            flash("The confirm link invalid", category="danger")
+            return redirect(url_for("main.home", page=1))
+    except:
+        flash("The confirm link invalid", category="danger")
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.email_confirm:
+        flash("Account already confirmed!", category="success")
+    else:
+        user.email_confirm = True
+        user.email_confirm_on = datetime.now()
+        db.session.add(user)
+        db.session.commit()
+        flash("You have confirmed your account!", category="success")
+    return redirect(url_for("main.home", page=1))
 
 
 # JWT token route

@@ -1,6 +1,7 @@
 import logging
 import click
-from .auth.models import User, db
+from .auth.models import User, Role, db
+from datetime import datetime
 
 log = logging.getLogger(__name__)
 
@@ -36,3 +37,33 @@ def register(app):
     def list_routes():
         for url in app.url_map.iter_rules():
             click.echo(f"{url.rule} {url.methods} {url.endpoint}")
+
+    @app.cli.command("init-db")
+    def init_db():
+        user_role = Role(name="user")
+        user_role.description = "Microblog's user. Read only rights."
+        try:
+            db.create_all()
+            click.echo("All tables has been created")
+            db.session.add(user_role)
+            db.session.commit()
+            click.echo("Role 'user' has been added")
+        except Exception as err:
+            db.session.rollback()
+            log.error(f"Error with creating DB tables {err}")
+
+    @app.cli.command("create-admin")
+    def create_admin():
+        admin_role = Role(name="administrator")
+        admin = User(email="admin@admin.com", f_name="Administrator")
+        admin.set_password("admin")
+        admin.roles.append(admin_role)
+        admin.email_confirm = True
+        admin.email_confirm_on = datetime.now()
+        try:
+            db.session.add(admin)
+            db.session.commit()
+            click.echo("Administrator was added")
+        except Exception as err:
+            db.session.rallback()
+            log.error(f"Error with creating administrator {err}")

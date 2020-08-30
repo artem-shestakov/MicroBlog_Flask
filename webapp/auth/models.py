@@ -25,6 +25,8 @@ class User(db.Model):
     password = db.Column(db.String(255))
     about = db.Column(db.Text())
     account_type = db.Column(db.String(25), nullable=False, default="local")
+    email_confirm = db.Column(db.Boolean(), nullable=False, default=False)
+    email_confirm_on = db.Column(db.DateTime())
     posts = db.relationship("Post", backref="users", lazy="dynamic")
     roles = db.relationship("Role", secondary=roles, backref=db.backref("users", lazy="dynamic"))
 
