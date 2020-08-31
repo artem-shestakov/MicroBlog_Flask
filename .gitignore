@@ -13,6 +13,7 @@ __pycache__/
 db_data
 migrations
 .coverage
+celerybeat-schedule.db
 
 # Certs
 *.pem

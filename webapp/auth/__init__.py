@@ -74,15 +74,14 @@ def create_module(app, **kwargs):
     event.listen(User, "after_insert", welcome_sender)
 
 
-
-def has_role(name):
+def has_role(roles):
     """Decorator function for checkin user's role"""
     def decorator_func(f):
         def wrapper_func(*args, **kwargs):
-            if current_user.has_role(name):
-                return f(*args, **kwargs)
-            else:
-                abort(403)
+            for role in roles:
+                if current_user.has_role(role):
+                    return f(*args, **kwargs)
+            abort(403)
         return update_wrapper(wrapper_func, f)
     return decorator_func
 
