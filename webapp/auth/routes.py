@@ -1,9 +1,10 @@
 from flask import Blueprint, redirect, render_template, url_for, flash, request, jsonify
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from flask_jwt_extended import create_access_token
 from .forms import RegistrationForm, LoginForm, OpenIDForm
 from . import openid, authenticate
 from .models import User
+from .tasks import send_confirm_email
 from .utils import confirm_token, generate_confirm_token
 from webapp import db
 from flask_babel import gettext
@@ -27,7 +28,7 @@ def page_not_found(error):
 
 # Route to login form
 @auth_blueprint.route("/login", methods=('GET', "POST"))
-@openid.loginhandler
+#@openid.loginhandler
 def login():
     form = LoginForm()
     openid_form = OpenIDForm()
@@ -108,6 +109,24 @@ def email_confirm(token):
         db.session.add(user)
         db.session.commit()
         flash("You have confirmed your account!", category="success")
+    return redirect(url_for("main.home", page=1))
+
+
+@auth_blueprint.route("/unconfirmed")
+@login_required
+def unconfirmed():
+    if current_user.email_confirm:
+        return redirect(url_for("main.home", page=1))
+    flash("Please confirm your email", category="warning")
+    return render_template("unconfirmed.html")
+
+
+@auth_blueprint.route("/resend_email", methods=["POST"])
+@login_required
+def resend_email():
+    email = current_user.email
+    send_confirm_email(email)
+    flash("Confirmation email has been send", category="info")
     return redirect(url_for("main.home", page=1))
 
 

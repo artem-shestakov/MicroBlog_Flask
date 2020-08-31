@@ -27,3 +27,9 @@ def you_are_welcome(self, email, token):
 def welcome_sender(mapper, connection, self):
     token = generate_confirm_token(self.email)
     you_are_welcome.apply_async(args=(self.email, token,))
+
+
+def send_confirm_email(email):
+    token = generate_confirm_token(email)
+    you_are_welcome.apply_async(args=(email, token,))
+
