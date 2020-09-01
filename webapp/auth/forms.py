@@ -66,3 +66,29 @@ class RegistrationForm(FlaskForm):
             self.email.errors.append(_("User with this email already exists"))
             return False
         return True
+
+
+class ForgotPass(FlaskForm):
+    """
+    Form for sending token to reset password
+    """
+    email = EmailField(_l("E-Mail"), validators=[DataRequired(), Length(max=255)])
+
+    def validate(self):
+        check_validate = super(ForgotPass, self).validate()
+        if not check_validate:
+            return False
+
+        user = User.query.filter_by(email=self.email.data).first()
+        if not user:
+            self.email.errors.append(_("User with this email is not registered"))
+            return False
+        return True
+
+
+class ResetPassword(FlaskForm):
+    """
+    Reset password form
+    """
+    password = PasswordField(_l("Password"), validators=[DataRequired(), Length(min=8)])
+    confirm_password = PasswordField(_l("Confirm password"), validators=[DataRequired(), EqualTo("password")])

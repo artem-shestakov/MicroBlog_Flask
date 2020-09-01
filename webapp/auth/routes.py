@@ -1,11 +1,11 @@
 from flask import Blueprint, redirect, render_template, url_for, flash, request, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_jwt_extended import create_access_token
-from .forms import RegistrationForm, LoginForm, OpenIDForm
+from .forms import RegistrationForm, LoginForm, OpenIDForm, ForgotPass, ResetPassword
 from . import openid, authenticate, check_confirmed
 from .models import User
-from .tasks import send_confirm_email
-from .utils import confirm_token, generate_confirm_token
+from .tasks import send_confirm_email, send_pass_reset_email
+from .utils import confirm_token, confirm_reset_pass_token
 from webapp import db
 from flask_babel import gettext
 from datetime import datetime
@@ -118,7 +118,7 @@ def email_confirm(token):
 def unconfirmed():
     if current_user.email_confirm:
         return redirect(url_for("main.home", page=1))
-    flash("Please confirm your email", category="danger")
+    flash(_("Please confirm your email"), category="danger")
     return render_template("unconfirmed.html")
 
 
@@ -127,8 +127,41 @@ def unconfirmed():
 def resend_email():
     email = current_user.email
     send_confirm_email(email)
-    flash("Confirmation email has been send", category="info")
+    flash(_("Confirmation email has been send"), category="info")
     return redirect(url_for("main.home", page=1))
+
+
+@auth_blueprint.route("/forgot-password", methods=["GET", "POST"])
+def forgot_pass():
+    form = ForgotPass()
+    if form.validate_on_submit():
+        email = form.email.data
+        send_pass_reset_email(email)
+        flash(_("We send you email to reset your password"), category="info")
+        redirect(".login")
+        return redirect(url_for(".login"))
+    return render_template("forgot_pass.html", form=form)
+
+
+@auth_blueprint.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    try:
+        email = confirm_reset_pass_token(token)
+        if email is False:
+            flash("The confirm link invalid", category="danger")
+            return redirect(url_for("main.home", page=1))
+    except:
+        flash("The confirm link invalid", category="danger")
+    form = ResetPassword()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=email["email"]).first()
+        if user:
+            new_password = form.password.data
+            user.set_password(new_password)
+            db.session.add(user)
+            db.session.commit()
+        return redirect(url_for(".login"))
+    return render_template("reset_pass.html", token=token, form=form)
 
 
 @auth_blueprint.route("/profile")
