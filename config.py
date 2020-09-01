@@ -67,7 +67,7 @@ class ProdConfig(Config):
 
 
 class DevConfig(Config):
-    DEBUG = True
+    DEBUG = False
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = True

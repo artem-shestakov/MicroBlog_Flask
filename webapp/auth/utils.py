@@ -35,7 +35,7 @@ def generate_reset_pass_token(email):
     return serializer.dumps({"email": email}).decode("utf-8")
 
 
-def confirm_reset_pass_token(token):
+def verify_reset_pass_token(token):
     """Getting email by encoding token to reset password"""
     serializer = TimedJSONWebSignatureSerializer(secret_key=current_app.config["SECRET_KEY"],
                                                  expires_in=1800)

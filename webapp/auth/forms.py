@@ -1,8 +1,10 @@
+from flask import flash, current_app, abort
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, TextAreaField, PasswordField, BooleanField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Length, EqualTo, URL
 from .models import User
+import sqlalchemy
 from flask_babel import lazy_gettext as _l
 from flask_babel import gettext as _
 
@@ -59,8 +61,16 @@ class RegistrationForm(FlaskForm):
         check_validate = super(RegistrationForm, self).validate()
         if not check_validate:
             return False
+        try:
+            user = User.query.filter_by(email=self.email.data).first()
+        except sqlalchemy.exc.OperationalError as err:
+            flash(_l("Something went wrong, try later"), category="danger")
+            if err.orig.args[0] == 1045:
+                current_app.logger.error(err)
+            elif err.orig.args[0] == 2003:
+                current_app.logger.error(err)
+            raise abort(500)
 
-        user = User.query.filter_by(email=self.email.data).first()
         # Additional check if user login in database
         if user:
             self.email.errors.append(_("User with this email already exists"))
