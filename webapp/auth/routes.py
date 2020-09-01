@@ -1,13 +1,15 @@
 from flask import Blueprint, redirect, render_template, url_for, flash, request, jsonify
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from flask_jwt_extended import create_access_token
 from .forms import RegistrationForm, LoginForm, OpenIDForm
-from . import openid, authenticate
+from . import openid, authenticate, check_confirmed
 from .models import User
+from .tasks import send_confirm_email
 from .utils import confirm_token, generate_confirm_token
 from webapp import db
 from flask_babel import gettext
 from datetime import datetime
+from flask_babel import gettext as _
 
 # Init Blueprint
 auth_blueprint = Blueprint(
@@ -27,7 +29,7 @@ def page_not_found(error):
 
 # Route to login form
 @auth_blueprint.route("/login", methods=('GET', "POST"))
-@openid.loginhandler
+#@openid.loginhandler
 def login():
     form = LoginForm()
     openid_form = OpenIDForm()
@@ -109,6 +111,31 @@ def email_confirm(token):
         db.session.commit()
         flash("You have confirmed your account!", category="success")
     return redirect(url_for("main.home", page=1))
+
+
+@auth_blueprint.route("/unconfirmed")
+@login_required
+def unconfirmed():
+    if current_user.email_confirm:
+        return redirect(url_for("main.home", page=1))
+    flash("Please confirm your email", category="danger")
+    return render_template("unconfirmed.html")
+
+
+@auth_blueprint.route("/resend_email", methods=["POST"])
+@login_required
+def resend_email():
+    email = current_user.email
+    send_confirm_email(email)
+    flash("Confirmation email has been send", category="info")
+    return redirect(url_for("main.home", page=1))
+
+
+@auth_blueprint.route("/profile")
+@login_required
+@check_confirmed
+def user_profile():
+    return render_template("profile.html", user=current_user, title=_("User profile"))
 
 
 # JWT token route
