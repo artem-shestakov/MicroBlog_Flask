@@ -67,7 +67,7 @@ class ProdConfig(Config):
 
 
 class DevConfig(Config):
-    DEBUG = True
+    DEBUG = False
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = True
@@ -82,12 +82,12 @@ class DevConfig(Config):
     CELERY_RESULT_BACKEND = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
     CELERY_IMPORTS = ["webapp.posts.tasks"]
     CELERY_ALWAYS_EAGER = False
-    # CELERYBEAT_SCHEDULE = {
-    #     'weekly-digest': {
-    #         'task': 'webapp.posts.tasks.remind',
-    #         'schedule': crontab(minute="*/1")
-    #     },
-    # }
+    CELERYBEAT_SCHEDULE = {
+        'weekly-digest': {
+            'task': 'webapp.posts.tasks.week_digest',
+            'schedule': crontab(day_of_week='monday', hour=7, minute=00)
+        },
+    }
     SERVER_NAME = "0.0.0.0:3000"
     PREFERRED_URL_SCHEME = "http"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'

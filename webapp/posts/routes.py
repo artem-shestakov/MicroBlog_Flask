@@ -75,7 +75,7 @@ def get_post(post_id):
 
 @posts_blueprint.route("/new", methods=("GET", "POST"))
 @login_required
-@has_role("author")
+@has_role(["author", "administrator"])
 def new_post():
     form = PostForm()
     if form.validate_on_submit():

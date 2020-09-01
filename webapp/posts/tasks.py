@@ -25,7 +25,8 @@ def remind(self, pk):
 
 
 @celery.task(bind=True, ignore_result=True, default_retry_dalay=300, max_retries=5)
-def week_digest(self, email):
+def week_digest(self):
+    email = "artem.s.shestakov@yandex.ru"
     # Getting current day and week day
     current_day = datetime.datetime.now()
     week_day = current_day.weekday()
@@ -42,7 +43,7 @@ def week_digest(self, email):
     with current_app.app_context():
         msg = MIMEText(render_template("digest.html", posts=posts), "html")
     msg["Subject"] = "Weekly digest"
-    msg["From"] = current_app.config['SMTP_FROM']
+    msg["From"] = "WebBlog Weekly Digest"
     msg["To"] = email
 
     try:

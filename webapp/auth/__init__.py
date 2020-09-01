@@ -9,7 +9,7 @@ from flask_openid import OpenIDResponse
 from flask import session, g, flash, redirect, url_for, abort, current_app
 from webapp import db
 from flask_jwt_extended import JWTManager
-from functools import update_wrapper
+from functools import update_wrapper, wraps
 from pymysql import OperationalError
 from flask_babel import gettext as _
 from sqlalchemy import event
@@ -74,20 +74,30 @@ def create_module(app, **kwargs):
     event.listen(User, "after_insert", welcome_sender)
 
 
-# Decorator function for checkin user's role
-def has_role(name):
+def has_role(roles):
+    """Decorator function for checkin user's role"""
     def decorator_func(f):
         def wrapper_func(*args, **kwargs):
-            if current_user.has_role(name):
-                return f(*args, **kwargs)
-            else:
-                abort(403)
+            for role in roles:
+                if current_user.has_role(role):
+                    return f(*args, **kwargs)
+            abort(403)
         return update_wrapper(wrapper_func, f)
     return decorator_func
 
 
-# Check user and password before return JWT
+def check_confirmed(f):
+    """Decorator for checking user's email confirmation"""
+    @wraps(f)
+    def wrapper_func(*args, **kwargs):
+        if current_user.email_confirm is False:
+            return redirect(url_for("auth.unconfirmed"))
+        return f(*args, **kwargs)
+    return wrapper_func
+
+
 def authenticate(email, password):
+    """Check user and password before return JWT"""
     from .models import User
     try:
         user = User.query.filter_by(email=email).first()
