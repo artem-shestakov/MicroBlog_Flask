@@ -83,6 +83,7 @@ class ForgotPass(FlaskForm):
     Form for sending token to reset password
     """
     email = EmailField(_l("E-Mail"), validators=[DataRequired(), Length(max=255)])
+    # recaptcha = RecaptchaField()
 
     def validate(self):
         check_validate = super(ForgotPass, self).validate()
@@ -102,3 +103,4 @@ class ResetPassword(FlaskForm):
     """
     password = PasswordField(_l("Password"), validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField(_l("Confirm password"), validators=[DataRequired(), EqualTo("password")])
+    # recaptcha = RecaptchaField()

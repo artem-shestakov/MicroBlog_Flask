@@ -3,7 +3,7 @@
 
 {% block body %}
 <div class="row justify-content-center">
-    <div class="col-lg-4">
+    <div class="col-lg-5">
         <h1 class="text-center my-4">{{ _('Sign In') }}</h1>
         <div class="text-center">
             <ul class="list-unstyled list-group list-group-horizontal justify-content-center">
@@ -55,7 +55,10 @@
                         {{ form.remember_me(class_='form-check-input mx-2') }}
                     </div>
                 </div>
-            <input id="sign_in_btn" class="btn-lg btn-success w-100" type="submit" value="{{ _('Sign In') }}" style="background-color: #149fec; border-color: #149fec">
+            <input id="sign_in_btn" class="btn-lg btn-success w-100" type="submit" value="{{ _('Sign In') }}" style="background-color: #7eb428; border-color: #7eb428">
+            <div class="text-center mt-2">
+                <a href="{{ url_for('auth.forgot_pass') }}">Forgot password?</a>
+            </div>
         </form>
     </div>
 </div>

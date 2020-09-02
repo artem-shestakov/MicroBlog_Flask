@@ -13,7 +13,7 @@ from functools import update_wrapper, wraps
 from pymysql import OperationalError
 from flask_babel import gettext as _
 from sqlalchemy import event
-from .tasks import welcome_sender
+from .tasks import greeting_sender
 
 
 # Create LoginManager object
@@ -71,7 +71,7 @@ def create_module(app, **kwargs):
     app.register_blueprint(github_blueprint, url_prefix="/auth/login")
     app.register_blueprint(gitlab_blueprint, url_prefix="/auth/login")
 
-    event.listen(User, "after_insert", welcome_sender)
+    event.listen(User, "after_insert", greeting_sender)
 
 
 def has_role(roles):

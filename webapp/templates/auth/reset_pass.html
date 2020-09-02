@@ -4,6 +4,19 @@
 
 {% block body %}
 <div class="row justify-content-center">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}
+                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
     <div class="col-md-6">
         <form class="border rounded-lg my-4 p-4" method="post" action="{{ url_for('.reset_password', token=token) }}">
             {{ form.hidden_tag() }}
@@ -29,7 +42,7 @@
 {#                {{ form.recaptcha.label }}#}
 {#                {{ form.recaptcha() }}#}
 {#            </div>#}
-            <input class="btn btn-success w-100" type="submit" value="{{ _('Reset password') }}" style="background-color: #149fec; border-color: #149fec">
+            <input class="btn btn-success w-100" type="submit" value="{{ _('Reset password') }}" style="background-color: #7eb428; border-color: #7eb428">
         </form>
     </div>
 </div>

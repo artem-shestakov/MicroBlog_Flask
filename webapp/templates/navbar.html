@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #ffffff">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000000">
 <div class="container flex-row">
     <a class="navbar-brand" href="{{ url_for('main.home', page=1) }}">
-        <img src="{{ url_for('static', filename='images/logo_.png') }}" height="50" alt="Logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" height="60" alt="Logo">
     </a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -9,14 +9,14 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" style="color: #000000" href="{{ url_for('main.home', page=1) }}">{{ _('Home') }}</a>
+                <a class="nav-link" style="color: #7eb428" href="{{ url_for('main.home', page=1) }}">{{ _('Home') }}</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" style="color: #000000" href="#">{{ _('About') }}</a>
+                <a class="nav-link" style="color: #7eb428" href="#">{{ _('About') }}</a>
             </li>
             {% if current_user.is_authenticated and current_user.has_role('administrator') %}
             <li>
-                <a class="nav-link active" style="color: #000000" href="{{ url_for('admin.index') }}">{{ _('Admin') }} <span class="sr-only">(current)</span></a>
+                <a class="nav-link active" style="color: #7eb428" href="{{ url_for('admin.index') }}">{{ _('Admin') }} <span class="sr-only">(current)</span></a>
             </li>
             {% endif %}
         </ul>
@@ -25,8 +25,8 @@
         </form>
         <ul class="navbar-nav justify-content-end">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" style="color: #000000" href="#"
-                id="navbarDropdown" role="button" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" style="color: #7eb428" href="#"
+                   id="navbarDropdown" role="button" data-toggle="dropdown">
                     <i class="fas fa-globe"></i>
                     {% if session['locale'] == 'en' %}
                         {{ _('Eng') }}
@@ -35,9 +35,9 @@
                     {% endif %}
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" style="color: #000000" href="{{url_for('babel.index',
+                    <a class="dropdown-item" style="color: #7eb428" href="{{url_for('babel.index',
                     locale='en')}}">Eng</a>
-                    <a class="dropdown-item" style="color: #000000" href="{{url_for('babel.index',
+                    <a class="dropdown-item" style="color: #7eb428" href="{{url_for('babel.index',
                     locale='ru')}}">Rus</a>
                 </div>
             </li>
@@ -45,17 +45,17 @@
         <ul class="navbar-nav justify-content-end">
         {% if current_user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" style="color: #000000" href="{{ url_for('auth.user_profile') }}"> {{ _('Hello %(username)s', username=current_user.f_name) }}</a>
+                <a class="nav-link" style="color: #7eb428" href="{{ url_for('auth.user_profile') }}"> {{ _('Hello %(username)s', username=current_user.f_name) }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" style="color: #000000" href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a>
+                <a class="nav-link" style="color: #7eb428" href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a>
             </li>
         {% else %}
             <li class="nav-item">
-                <a class="nav-link" style="color: #000000" href="{{ url_for('auth.registration') }}">{{ _('Sign up') }}</a>
+                <a class="nav-link" style="color: #7eb428" href="{{ url_for('auth.registration') }}">{{ _('Sign up') }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" style="color: #000000" href="{{ url_for('auth.login')}}">{{ _('Sign In') }}</a>
+                <a class="nav-link" style="color: #7eb428" href="{{ url_for('auth.login')}}">{{ _('Sign In') }}</a>
             </li>
         {% endif %}
             </ul>

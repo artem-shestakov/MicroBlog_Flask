@@ -170,6 +170,7 @@ def reset_password(token):
     """Reset password by user's token"""
     try:
         email = verify_reset_pass_token(token)["email"]
+        print(">>>>>>", email)
         if email is False:
             flash("The confirm link invalid", category="danger")
             return redirect(url_for("main.home", page=1))
