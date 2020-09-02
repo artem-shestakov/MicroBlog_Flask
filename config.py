@@ -67,7 +67,7 @@ class ProdConfig(Config):
 
 
 class DevConfig(Config):
-    DEBUG = False
+    DEBUG = True
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = True
@@ -92,7 +92,7 @@ class DevConfig(Config):
     PREFERRED_URL_SCHEME = "http"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     SALT_SECRET = "email_confirmation_secret"
-    SMTP_FROM = smtp_from
+    SMTP_FROM = "MicroBlog"
     SMTP_SERVER = smtp_server
     SMTP_USER = smtp_user
     SMTP_PASS = smtp_pass
