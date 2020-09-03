@@ -59,7 +59,7 @@ def login():
     if form.validate_on_submit():
         user = find_user(email=form.email.data)
         login_user(user, remember=form.remember_me.data)
-        flash("You have been logged successfully", category="success")
+        flash(_("You have been logged successfully"), category="success")
         return redirect(url_for("main.home", page=1))
     return render_template("login.html", form=form)
 
@@ -70,7 +70,7 @@ def login():
 def logout():
     """Logout user function"""
     logout_user()
-    flash("You have been logged out", category="success")
+    flash(_("You have been logged out"), category="success")
     return redirect(url_for("main.home", page=1))
 
 
@@ -88,6 +88,7 @@ def registration():
             db.session.add(new_user)
             db.session.commit()
         except sqlalchemy.exc.OperationalError as err:
+            db.session.rollback()
             flash(gettext("Something went wrong, try later"), category="danger")
             if err.orig.args[0] == 1045:
                 current_app.logger.error(err)
@@ -95,7 +96,6 @@ def registration():
                 current_app.logger.error(err)
             raise abort(500)
         except Exception as err:
-            print(">>>>>", err)
             raise abort(500)
         return redirect(url_for(".login"))
     return render_template("registration.html", form=form)
@@ -109,9 +109,11 @@ def email_confirm(token):
         email = confirm_token(token)
         if email is False:
             flash("The confirm link invalid", category="danger")
+            current_app.logger.warning(f"Try confirm email with invalid token")
             return redirect(url_for("main.home", page=1))
-    except:
+    except Exception as err:
         flash("The confirm link invalid", category="danger")
+        current_app.logger.error(f"Error with getting email from token {err}")
     user = find_user(email=email)
     if user.email_confirm:
         flash("Account already confirmed!", category="success")
@@ -123,6 +125,7 @@ def email_confirm(token):
             db.session.commit()
             flash("You have confirmed your account!", category="success")
         except sqlalchemy.exc.OperationalError as err:
+            db.session.rollback()
             flash(gettext("Something went wrong, try later"), category="danger")
             if err.orig.args[0] == 1045:
                 current_app.logger.error(err)
@@ -135,7 +138,7 @@ def email_confirm(token):
 @auth_blueprint.route("/unconfirmed")
 @login_required
 def unconfirmed():
-    """If user confirm redirect to index oage, else render unconfirmed page"""
+    """If user confirm redirect to index page, else render unconfirmed page"""
     if current_user.email_confirm:
         return redirect(url_for("main.home", page=1))
     flash(_("Please confirm your email"), category="danger")
@@ -149,6 +152,7 @@ def resend_email():
     email = current_user.email
     send_confirm_email(email)
     flash(_("Confirmation email has been send"), category="info")
+    current_app.logger.info(f"Re-Send email on {email}")
     return redirect(url_for("main.home", page=1))
 
 
@@ -159,7 +163,8 @@ def forgot_pass():
     if form.validate_on_submit():
         email = form.email.data
         send_pass_reset_email(email)
-        flash(_("We send you email to reset your password"), category="info")
+        flash(_(f"We send you email on {email} to reset your password"), category="info")
+        current_app.logger.info(f"Send reset password email on {email}")
         redirect("main.home")
         return redirect(url_for(".login"))
     return render_template("forgot_pass.html", form=form)
@@ -169,24 +174,29 @@ def forgot_pass():
 def reset_password(token):
     """Reset password by user's token"""
     try:
+        # Getting email from token
         email = verify_reset_pass_token(token)["email"]
-        print(">>>>>>", email)
         if email is False:
+            current_app.logger.warning(f"Try reset password with invalid token")
             flash("The confirm link invalid", category="danger")
             return redirect(url_for("main.home", page=1))
-    except:
+    except Exception as err:
+        current_app.logger.error(f"Error with getting email from token {err}")
         flash("The confirm link invalid", category="danger")
         return redirect(url_for("main.home", page=1))
     form = ResetPassword()
+    # If request is POST
     if form.validate_on_submit():
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first_or_404()
         if user:
             new_password = form.password.data
             user.set_password(new_password)
             try:
                 db.session.add(user)
                 db.session.commit()
+                current_app.logger.info(f"User {user.email} reset password successfully")
             except sqlalchemy.exc.OperationalError as err:
+                db.session.rollback()
                 flash(gettext("Something went wrong, try later"), category="danger")
                 if err.orig.args[0] == 1045:
                     current_app.logger.error(err)
@@ -208,6 +218,7 @@ def user_profile():
 # JWT token route
 @auth_blueprint.route("/api", methods=["POST"])
 def api():
+    """Getting JWT by email and password"""
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
     email = request.json.get("email", None)
