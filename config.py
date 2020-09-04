@@ -48,6 +48,7 @@ class ProdConfig(Config):
     SERVER_NAME = "artem-shestakov.site"
     PREFERRED_URL_SCHEME = "https"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
+    SALT_SECRET = "your_email_salt_secret"
     SMTP_FROM = smtp_from
     SMTP_SERVER = smtp_server
     SMTP_USER = smtp_user
@@ -85,6 +86,7 @@ class HerokuConfig(Config):
     # SERVER_NAME = "artem-shestakov.site"
     # PREFERRED_URL_SCHEME = "https"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
+    SALT_SECRET = "your_email_salt_secret"
     SMTP_FROM = smtp_from
     SMTP_SERVER = smtp_server
     SMTP_USER = smtp_user
