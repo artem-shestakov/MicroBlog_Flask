@@ -2,6 +2,7 @@ import unittest
 from webapp import create_app, db
 from webapp.auth.models import Role, User
 import json
+from flask import current_app
 
 
 class TestURL(unittest.TestCase):
@@ -15,6 +16,7 @@ class TestURL(unittest.TestCase):
         self.client = app.test_client()
         db.app = app
         db.create_all()
+        self.app = app
 
     def tearDown(self):
         """Close connection to database"""
@@ -22,17 +24,23 @@ class TestURL(unittest.TestCase):
         db.session.remove()
 
     def _insert_user(self, email, f_name, password, role):
-        """Create role and user"""
+        """ Create role and user
 
+        :param email: User's email
+        :param f_name: User's first name
+        :param password: User's account password
+        :param role: User's blog role
+        """
 
-        test_role = Role(role)
-        db.session.add(test_role)
-        db.session.commit()
+        with self.app.app_context():
+            test_role = Role(role)
+            db.session.add(test_role)
+            db.session.commit()
 
-        test_user = User(email=email, f_name=f_name)
-        test_user.set_password(password)
-        db.session.add(test_user)
-        db.session.commit()
+            test_user = User(email=email, f_name=f_name)
+            test_user.set_password(password)
+            db.session.add(test_user)
+            db.session.commit()
 
     def test_root_url(self):
         """Test root URL"""
@@ -46,7 +54,7 @@ class TestURL(unittest.TestCase):
         result = self.client.get("/post")
         self.assertEqual(result.status_code, 308)
 
-    def test_login(self):
+    def test_login_logout(self):
         """Test correct login and logout"""
 
         self._insert_user("test01@test.com", "test_user", "test", "user")
@@ -109,10 +117,19 @@ class TestURL(unittest.TestCase):
             "Content-type": "application/json"
         }
         self._insert_user("test01@test.com", "test_user", "test", "user")
+        # Test incorrect password
         payload = {"email": "test01@test.com", "password": "blabla"}
         result = self.client.post("/auth/api", data=json.dumps(payload), headers=headers)
-
         self.assertEqual(result.status_code, 401)
+
+        # Test missing arguments
+        payload = {"email": "test01@test.com"}
+        result = self.client.post("/auth/api", data=json.dumps(payload), headers=headers)
+        self.assertEqual(result.status_code, 400)
+
+        payload = {"password": "test"}
+        result = self.client.post("/auth/api", data=json.dumps(payload), headers=headers)
+        self.assertEqual(result.status_code, 400)
 
     def test_api_new_post(self):
         """Test API add new post"""
@@ -130,6 +147,86 @@ class TestURL(unittest.TestCase):
         result = self.client.post("/api/post", data=json.dumps(payload), headers=headers)
 
         self.assertEqual(result.status_code, 201)
+
+    def test_email_confirmation(self):
+        """Test user's email confirmation process"""
+        # Add user
+        self._insert_user("test01@test.com", "test_user", "test", "user")
+
+        # Get email status
+        user = User.query.filter_by(email="test01@test.com").first_or_404()
+        self.assertEqual(user.email_confirm, False)
+
+        # Create token for email confirmation
+        from webapp.auth.utils import generate_confirm_token
+        with self.app.app_context():
+            token = generate_confirm_token("test01@test.com")
+
+        # GET email confirmation
+        result = self.client.get(f"/auth/email-confirm/{token}")
+        self.assertEqual(result.status_code, 302)
+
+        # GET root address with answer from URL '/auth/email-confirm/'
+        result = self.client.get("/")
+        self.assertIn("You have confirmed your account!", result.data.decode("utf-8"))
+
+        # Check /unconfirmed URL
+        result = self.client.get("/auth/unconfirmed")
+        self.assertEqual(result.status_code, 302)
+
+    def test_fail_email_confirmation(self):
+        """Test fail user's email confirmation process with not valid token"""
+        # Add user
+        self._insert_user("test01@test.com", "test_user", "test", "user")
+
+        # Request with not valid token
+        result = self.client.get(f"/auth/email-confirm/{b'abc.abc'}")
+        self.assertEqual(result.status_code, 302)
+
+        # Get root address with answer from URL '/auth/email-confirm/'
+        result = self.client.get("/")
+        self.assertIn("The confirm link invalid", result.data.decode("utf-8"))
+
+        result = self.client.post("auth/login", data=dict(
+            email="test01@test.com",
+            password="test"
+        ), follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+        self.assertIn("You have been logged successfully", result.data.decode("utf-8"))
+
+        # Check /unconfirmed URL
+        result = self.client.get("/auth/unconfirmed")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn("Please confirm your email", result.data.decode("utf-8"))
+
+    def test_password_reset(self):
+        """Test reset user's password"""
+        # Add user
+        self._insert_user("test01@test.com", "test_user", "test", "user")
+
+        # Check /forgot-password URL
+        result = self.client.post("/auth/forgot-password", data=dict(
+            email="test01@test.com"
+        ), follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+
+        # Reset password
+        from webapp.auth.utils import generate_reset_pass_token
+        with self.app.app_context():
+            token = generate_reset_pass_token("test01@test.com")
+        result = self.client.post(f"/auth/reset-password/{token}", data=dict(
+            password="new_pass",
+            confirm_password="new_pass"
+        ), follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+
+        # Check login
+        result = self.client.post("auth/login", data=dict(
+            email="test01@test.com",
+            password="new_pass"
+        ), follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+        self.assertIn("You have been logged successfully", result.data.decode("utf-8"))
 
 
 if __name__ == '__main__':

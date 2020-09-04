@@ -118,6 +118,7 @@ class TestConfig(Config):
     CACHE_TYPE = 'null'
     WTF_CSRF_ENABLED = False
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
+    SALT_SECRET = "email_confirmation_secret"
 
     CELERY_BROKER_URL = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
     CELERY_RESULT_BACKEND = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@127.0.0.1//"
