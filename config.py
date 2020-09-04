@@ -66,6 +66,42 @@ class ProdConfig(Config):
     GITLAB_CLIENT_SECRET = f"{gitlab_client_secret}"
 
 
+class HerokuConfig(Config):
+    DEBUG = False
+    DEBUG_TB_ENABLED = False
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+    ASSETS_DEBUG = False
+    CACHE_TYPE = "null"
+    # CACHE_REDIS_HOST = "redis"
+    # CACHE_REDIS_PORT = "6379"
+    # CACHE_REDIS_DB = "0"
+    SQLALCHEMY_DATABASE_URI = f"postgres://gihiwgbvsssbds:319fcae11841ca0b606abcd3a27c90be4865591b2f4f23127dd548181ebff0a1@ec2-34-192-122-0.compute-1.amazonaws.com:5432/d4s5hosvq8ccb3"
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # CELERY_BROKER_URL = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@rabbitmq//"
+    # CELERY_RESULT_BACKEND = f"amqp://{rabbitmq_user}:{rabbitmq_user_password}@rabbitmq//"
+    # CELERY_IMPORTS = ["webapp.posts.tasks"]
+    # CELERY_ALWAYS_EAGER = False
+    # SERVER_NAME = "artem-shestakov.site"
+    # PREFERRED_URL_SCHEME = "https"
+    SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
+    SMTP_FROM = smtp_from
+    SMTP_SERVER = smtp_server
+    SMTP_USER = smtp_user
+    SMTP_PASS = smtp_pass
+    RECAPTCHA_PUBLIC_KEY = f"{recaptch_public_key}"
+    RECAPTCHA_PRIVATE_KEY = f"{recaptcha_private_key}"
+    PROPAGATE_EXCEPTIONS = True
+    OAUTHLIB_RELAX_TOKEN_SCOPE = 1
+    TWITTER_API_KEY = f"{tw_api_key}"
+    TWITTER_API_SECRET = f"{tw_api_secret}"
+    FACEBOOK_CLIENT_ID = f"{fb_client_id}"
+    FACEBOOK_CLIENT_SECRET = f"{fb_client_secret}"
+    GITHUB_CLIENT_ID = f"{github_client_id}"
+    GITHUB_CLIENT_SECRET = f"{github_client_secret}"
+    GITLAB_CLIENT_ID = f"{gitlab_client_id}"
+    GITLAB_CLIENT_SECRET = f"{gitlab_client_secret}"
+
 class DevConfig(Config):
     DEBUG = True
     DEBUG_TB_ENABLED = False
