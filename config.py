@@ -26,6 +26,8 @@ smtp_from = os.getenv("SMTP_FROM")
 smtp_server = os.getenv("SMTP_SERVER")
 smtp_user = os.getenv("SMTP_USER")
 smtp_pass = os.getenv("SMTP_PASS")
+lemur_url = os.getenv("CLOUDAMQP_URL")
+db_url = os.getenv("DATABASE_URL")
 
 os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
@@ -81,11 +83,11 @@ class HerokuConfig(Config):
     # CACHE_REDIS_HOST = "redis"
     # CACHE_REDIS_PORT = "6379"
     # CACHE_REDIS_DB = "0"
-    SQLALCHEMY_DATABASE_URI = f"postgres://{psql_user}:{psql_pass}@ec2-34-192-122-0.compute-1.amazonaws.com:5432/{psql_db}"
+    SQLALCHEMY_DATABASE_URI = db_url
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    CELERY_BROKER_URL = f"amqp://{lemur_user}:{lemur_pass}@grouse.rmq.cloudamqp.com/{lemur_user}"
-    CELERY_RESULT_BACKEND = f"amqp://{lemur_user}:{lemur_pass}@grouse.rmq.cloudamqp.com/{lemur_user}"
+    CELERY_BROKER_URL = lemur_url
+    CELERY_RESULT_BACKEND = lemur_url
     CELERY_IMPORTS = ["webapp.posts.tasks"]
     CELERY_ALWAYS_EAGER = False
     SERVER_NAME = "warm-citadel-02208.herokuapp.com"
