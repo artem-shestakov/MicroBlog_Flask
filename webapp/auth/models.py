@@ -68,7 +68,7 @@ class User(db.Model):
 
     # Encrypt user password
     def set_password(self, password):
-        self.password = bcrypt.generate_password_hash(password).encode("utf-8")
+        self.password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     # Check hash from db and from login form
     def check_password(self, password):
