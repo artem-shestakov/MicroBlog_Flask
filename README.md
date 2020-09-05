@@ -23,9 +23,11 @@ Creating app... done, ⬢ rocky-brushlands-98089
 https://rocky-brushlands-98089.herokuapp.com/ | https://git.heroku.com/rocky-brushlands-98089.git
 ```
 Go to Heroku -> Your app -> Installed add-ons. Select your PostgreSQL add-on and copy Database Credentials from settings page. Write it on config.py file.
+
 ![Heroku Database Credentials](https://i.ibb.co/8xt4QVB/Heroku-Database-Credentials.png)
 
 Add CloudAMQP add-on. Go to Heroku -> Your app -> Installed add-ons. Select your CloudAMQP add-on and copy Database Credentials from detail page. Write it on config.py file.
+
 ![Herolu CloudAMQP](https://i.ibb.co/fNkjS2F/Heroku-AMQP.png)
 
 Deploy your code to Heroku git:
