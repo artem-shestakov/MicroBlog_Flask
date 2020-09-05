@@ -16,7 +16,7 @@ $ flask db upgrade
 
 ## Deploy
 ### Heroku
-Create app om Heroku:
+Create app on Heroku:
 ```shell script
 $ heroku create
 Creating app... done, ⬢ rocky-brushlands-98089
