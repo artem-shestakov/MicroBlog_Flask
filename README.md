@@ -1,4 +1,4 @@
-# Flask_project
+# MicroBlog by Flask
 
 ## Init or change project
 ### Create all tables in DB
