@@ -78,6 +78,14 @@ class RegistrationForm(FlaskForm):
         return True
 
 
+class ProfileForm(FlaskForm):
+    """Form of user's profile"""
+    email = EmailField(_l("E-Mail"), validators=[DataRequired(), Length(max=255)])
+    f_name = StringField(_l("First name"), validators=[DataRequired(), Length(max=255)])
+    l_name = StringField(_l("Last name"), validators=[Length(max=255)])
+    about = TextAreaField(_l("About"), validators=[Length(max=1000)])
+
+
 class ForgotPass(FlaskForm):
     """
     Form for sending token to reset password
