@@ -19,7 +19,7 @@ def send_email(self, email, token, msg_type):
         elif msg_type == "reset_password":
             msg = MIMEText(render_template("reset_pass_email.html", token=token), "html")
             msg["Subject"] = "Password reset MicroBlog"
-    msg["From"] = current_app.config["SMTP_FROM"]
+    msg["From"] = "MicroBlog"
     msg["To"] = email
 
     try:

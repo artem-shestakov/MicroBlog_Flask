@@ -42,7 +42,44 @@
                 {{ form.about(class_='form-control', disabled=True) }}
             </div>
             <a class="btn btn-warning" role="button" href="{{ url_for('auth.edit_profile') }}">Edit profile</a>
-            <input class="btn btn-success" type="submit" value="{{ _('Change password') }}" style="background-color: #7eb428; border-color: #7eb428">
-
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#changePassword">
+                Change password
+            </button>
         </form>
+        <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="changePassword" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Change password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('auth.change_password') }}" method="post">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                {{ form_change_pass.password.label }}
+                                {% if form_change_pass.password.errors %}
+                                    {% for error in form_change_pass.password.errors %}
+                                        <p class="alert-warning">{{ error }}</p>
+                                    {% endfor %}
+                                {% endif %}
+                                {{ form_change_pass.password(class_='form-control') }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_change_pass.confirm_password.label }}
+                                {% if form_change_pass.confirm_password.errors %}
+                                    {% for error in form_change_pass.confirm_password.errors %}
+                                        <p class="alert-warning">{{ error }}</p>
+                                    {% endfor %}
+                                {% endif %}
+                                {{ form_change_pass.confirm_password(class_='form-control') }}
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input class="btn btn-success" type="submit" value="{{ _('Change password') }}" style="background-color: #7eb428; border-color: #7eb428">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 {% endblock %}
