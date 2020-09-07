@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('../images/p404.png'), #151729;
+    background: url('../images/p404.png'), #a3a3a3;
     box-shadow: 0 15px 30px rgba(0,0,0,.5);
 }
 #container .content {
@@ -26,21 +26,21 @@ body {
 }
 #container .content h2 {
     font-size: 18vw;
-    color: #ffffff;
+    color: #151729;
     line-height: 1em;
 }
 #container .content h4 {
     position: relative;
     font-size: 1.5em;
     margin-bottom: 20px;
-    color: #111111;
-    background: #ffffff;
+    color: #ffffff;
+    background: #151729;
     font-weight: 300;
     padding: 10px 10px;
     display: inline-block;
 }
 #container .content p {
-    color: #ffffff;
+    color: #151729;
     font-size: 1.2em;
 }
 #container .content a {
@@ -52,5 +52,5 @@ body {
     text-decoration: none;
     margin-top: 25px;
     border-radius: 25px;
-    border-bottom: 4px solid #93c93c;
+    border-bottom: 4px solid #85bb2f;
 }
