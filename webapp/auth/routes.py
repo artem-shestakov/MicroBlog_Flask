@@ -228,7 +228,10 @@ def edit_profile():
     form = ProfileForm()
     if form.validate_on_submit():
         user = current_user
-        user.email = form.email.data
+        if user.email != form.email.data:
+            user.email = form.email.data
+            user.email_confirm = False
+            send_confirm_email(user.email)
         user.f_name = form.f_name.data
         user.l_name = form.l_name.data
         user.about = form.about.data

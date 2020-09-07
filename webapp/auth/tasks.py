@@ -13,6 +13,9 @@ def send_email(self, email, token, msg_type):
         if msg_type == "greeting":
             msg = MIMEText(render_template("welcome.html", user=self, token=token), "html")
             msg["Subject"] = "Welcome from MicroBlog"
+        elif msg_type == "email_confirm":
+            msg = MIMEText(render_template("email_confirm.html", user=self, token=token), "html")
+            msg["Subject"] = "Email confirmation"
         elif msg_type == "reset_password":
             msg = MIMEText(render_template("reset_pass_email.html", token=token), "html")
             msg["Subject"] = "Password reset MicroBlog"
@@ -37,7 +40,7 @@ def greeting_sender(mapper, connection, self):
 
 def send_confirm_email(email):
     token = generate_confirm_token(email)
-    send_email.apply_async(args=(email, token, "greeting"))
+    send_email.apply_async(args=(email, token, "email_confirm"))
 
 
 def send_pass_reset_email(email):
