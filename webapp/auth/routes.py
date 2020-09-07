@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, url_for, flash, request,
 import sqlalchemy
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_jwt_extended import create_access_token
-from .forms import RegistrationForm, LoginForm, OpenIDForm, ForgotPass, ResetPassword
+from .forms import RegistrationForm, LoginForm, OpenIDForm, ForgotPass, ResetPassword, ProfileForm
 from . import authenticate, check_confirmed
 from .models import User
 from .tasks import send_confirm_email, send_pass_reset_email
@@ -212,7 +212,78 @@ def reset_password(token):
 @check_confirmed
 def user_profile():
     """User's profile page"""
-    return render_template("profile.html", user=current_user, title=_("User profile"))
+    form = ProfileForm()
+    form_change_pass = ResetPassword()
+    form.email.data = current_user.email
+    form.f_name.data = current_user.f_name
+    form.l_name.data = current_user.l_name
+    form.about.data = current_user.about
+    return render_template("profile.html", form=form, form_change_pass=form_change_pass, title=_("User profile"))
+
+
+@auth_blueprint.route("/edit-profile", methods=["GET", "POST"])
+@login_required
+@check_confirmed
+def edit_profile():
+    """Edit user's profile page"""
+    form = ProfileForm()
+    if form.validate_on_submit():
+        user = current_user
+        if user.email != form.email.data:
+            user.email = form.email.data
+            user.email_confirm = False
+            send_confirm_email(user.email)
+        user.f_name = form.f_name.data
+        user.l_name = form.l_name.data
+        user.about = form.about.data
+        try:
+            db.session.merge(user)
+            db.session.commit()
+            current_app.logger.info(f"User {user.email} changed profile info")
+            flash("Your profile has been change successfully", category="success")
+        except sqlalchemy.exc.OperationalError as err:
+            db.session.rollback()
+            flash(gettext("Something went wrong, try later"), category="danger")
+            if err.orig.args[0] == 1045:
+                current_app.logger.error(err)
+            elif err.orig.args[0] == 2003:
+                current_app.logger.error(err)
+            raise abort(500)
+        return redirect(url_for("auth.user_profile"))
+    form.email.data = current_user.email
+    form.f_name.data = current_user.f_name
+    form.l_name.data = current_user.l_name
+    form.about.data = current_user.about
+    return render_template("edit_profile.html", form=form, title=_("Edit profile"))
+
+
+@auth_blueprint.route("/change-password", methods=["POST"])
+@login_required
+def change_password():
+    """Change user's password from profile page"""
+    form = ResetPassword()
+    user = current_user
+    if form.validate_on_submit():
+        new_password = form.password.data
+        user.set_password(new_password)
+        try:
+            db.session.add(user)
+            db.session.commit()
+            current_app.logger.info(f"User {user.email} changed password successfully")
+            flash("Your email has been change successfully", category="success")
+        except sqlalchemy.exc.OperationalError as err:
+            db.session.rollback()
+            flash(gettext("Something went wrong, try later"), category="danger")
+            if err.orig.args[0] == 1045:
+                current_app.logger.error(err)
+            elif err.orig.args[0] == 2003:
+                current_app.logger.error(err)
+            raise abort(500)
+        return redirect(url_for('auth.user_profile'))
+    for field, message in form.errors.items():
+        flash(gettext(f"{field}: {message[0]}"), category="danger")
+        current_app.logger.error(f"Error with {user.email} changing password {field}->{message}")
+    return redirect(url_for('auth.user_profile'))
 
 
 # JWT token route
