@@ -120,6 +120,8 @@ def email_confirm(token):
     else:
         user.email_confirm = True
         user.email_confirm_on = datetime.now()
+        user.subscription = True
+        current_app.logger.info(f"User {user.email} confirmed email")
         try:
             db.session.add(user)
             db.session.commit()
@@ -232,6 +234,7 @@ def edit_profile():
         if user.email != form.email.data:
             user.email = form.email.data
             user.email_confirm = False
+            user.subscription = False
             send_confirm_email(user.email)
         user.f_name = form.f_name.data
         user.l_name = form.l_name.data
