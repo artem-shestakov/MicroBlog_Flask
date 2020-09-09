@@ -27,6 +27,7 @@ class User(db.Model):
     account_type = db.Column(db.String(25), nullable=False, default="local")
     email_confirm = db.Column(db.Boolean(), nullable=False, default=False)
     email_confirm_on = db.Column(db.DateTime())
+    subscription = db.Column(db.Boolean(), nullable=False, default=False)
     posts = db.relationship("Post", backref="users", lazy="dynamic")
     roles = db.relationship("Role", secondary=roles, backref=db.backref("users", lazy="dynamic"))
 

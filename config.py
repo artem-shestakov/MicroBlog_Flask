@@ -129,8 +129,9 @@ class DevConfig(Config):
     CELERY_ALWAYS_EAGER = False
     CELERYBEAT_SCHEDULE = {
         'weekly-digest': {
-            'task': 'webapp.posts.tasks.week_digest',
-            'schedule': crontab(day_of_week='monday', hour=7, minute=00)
+            'task': 'webapp.posts.tasks.week_digest_sender',
+            # 'schedule': crontab(day_of_week='monday', hour=7, minute=00)
+            'schedule': crontab(minute='*/3')
         },
     }
     SERVER_NAME = "0.0.0.0:3000"

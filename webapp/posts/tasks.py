@@ -1,4 +1,6 @@
 from webapp import celery
+from webapp.auth.models import User
+from celery import group
 from flask import current_app, render_template
 import smtplib
 from .models import Reminder, db, Post
@@ -25,8 +27,8 @@ def remind(self, pk):
 
 
 @celery.task(bind=True, ignore_result=True, default_retry_dalay=300, max_retries=5)
-def week_digest(self):
-    email = "artem.s.shestakov@yandex.ru"
+def week_digest(self, email):
+    """Send week digest of posts"""
     # Getting current day and week day
     current_day = datetime.datetime.now()
     week_day = current_day.weekday()
@@ -55,6 +57,15 @@ def week_digest(self):
         return
     except Exception as e:
         self.retry(exc=e)
+
+
+@celery.task()
+def week_digest_sender():
+    """Start group of task for sending week digest"""
+    users = User.query.filter_by(subscription=True).all()
+    sig = group(week_digest.s(user.email) for user in users)
+    result = sig.delay()
+    result.get()
 
 
 def reminder_save(mapper, connect, self):
