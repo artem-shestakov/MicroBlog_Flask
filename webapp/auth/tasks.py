@@ -1,8 +1,10 @@
 from flask import current_app, render_template
 from webapp import celery
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from .utils import generate_confirm_token, generate_reset_pass_token
 import smtplib
+import base64
 
 
 @celery.task(bind=True, ignore_result=True, default_retry_dalay=300, max_retries=5)
@@ -11,7 +13,10 @@ def send_email(self, email, token, msg_type):
 
     with current_app.app_context():
         if msg_type == "greeting":
-            msg = MIMEText(render_template("welcome.html", user=self, token=token), "html")
+            msg = MIMEMultipart("alternative")
+            logo = base64.b64encode(open("./webapp/static/images/logo.png", "rb").read()).decode()
+            part = MIMEText(render_template("welcome.html", user=self, token=token, logo=logo), "html")
+            msg.attach(part)
             msg["Subject"] = "Welcome from MicroBlog"
         elif msg_type == "email_confirm":
             msg = MIMEText(render_template("email_confirm.html", user=self, token=token), "html")
