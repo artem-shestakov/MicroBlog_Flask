@@ -41,6 +41,14 @@
                 {% endif %}
                 {{ form.about(class_='form-control', disabled=True) }}
             </div>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                    <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
+                </div>
+                <div class="custom-control custom-switch my-4">
+                    {{ form.subscription.label(class_='custom-control-label', for_='subsciptionSwitch') }}
+                    {{ form.subscription(class_='custom-control-input', type_='checkbox', id_='subsciptionSwitch') }}
+                </div>
             <a class="btn btn-warning" role="button" href="{{ url_for('auth.edit_profile') }}">Edit profile</a>
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#changePassword">
                 Change password
