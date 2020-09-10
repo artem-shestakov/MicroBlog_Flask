@@ -220,6 +220,7 @@ def user_profile():
     form.f_name.data = current_user.f_name
     form.l_name.data = current_user.l_name
     form.about.data = current_user.about
+    form.subscription.data = current_user.subscription
     return render_template("profile.html", form=form, form_change_pass=form_change_pass, title=_("User profile"))
 
 
@@ -239,6 +240,7 @@ def edit_profile():
         user.f_name = form.f_name.data
         user.l_name = form.l_name.data
         user.about = form.about.data
+        user.subscription = form.subscription.data
         try:
             db.session.merge(user)
             db.session.commit()
@@ -257,6 +259,7 @@ def edit_profile():
     form.f_name.data = current_user.f_name
     form.l_name.data = current_user.l_name
     form.about.data = current_user.about
+    form.subscription.data = current_user.subscription
     return render_template("edit_profile.html", form=form, title=_("Edit profile"))
 
 

@@ -84,6 +84,7 @@ class ProfileForm(FlaskForm):
     f_name = StringField(_l("First name"), validators=[DataRequired(), Length(max=255)])
     l_name = StringField(_l("Last name"), validators=[Length(max=255)])
     about = TextAreaField(_l("About"), validators=[Length(max=1000)])
+    subscription = BooleanField(_l("Weekly digest"))
 
 
 class ForgotPass(FlaskForm):
