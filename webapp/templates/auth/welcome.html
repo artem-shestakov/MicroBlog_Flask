@@ -8,9 +8,22 @@
       content="width=device-width, initial-scale=1.0"/>
     <title>Welcome!</title>
   </head>
-  <body>
-    <h1>Welcome!!!</h1>
-    <p>Thanks for signing up. Please follow this link to activate your account:</p>
-    <p><a href="{{ url_for('auth.email_confirm', token=token) }}">Confirm E-Mail</a></p>
+  <body style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+        <div style="max-width: 600px; margin: 0 auto">
+            <a href="{{ url_for('main.home', page=1) }}">
+                <img src="data:image/png;base64,{{ logo }}" alt="Logo" style="display: block; margin: 0 auto;">
+            </a>
+            <h1 style="text-align: center; margin: 10px; color: #7eb428">Welcome!!!</h1>
+            <p style="text-align: center; margin: 10px; color: #686868; font-size: 20px">Thanks for signing up. Please press the button below to confirm your email.</p>
+            <table style="margin-left: auto; margin-right: auto">
+                <tbody>
+                    <tr>
+                        <td style="background-color: #7eb428; border-radius: 4px; font-size: 20px; font-weight: bold; line-height: 25px">
+                            <a href="{{ url_for('auth.email_confirm', token=token) }}" style="display: block; color: #ffffff; text-decoration: none; padding: 12px 24px">Confirm email</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
   </body>
 </html>

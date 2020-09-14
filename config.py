@@ -41,6 +41,8 @@ class ProdConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = False
+    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
+                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "redis"
     CACHE_REDIS_HOST = "redis"
     CACHE_REDIS_PORT = "6379"
@@ -79,6 +81,8 @@ class HerokuConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = False
+    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
+                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "null"
     # CACHE_REDIS_HOST = "redis"
     # CACHE_REDIS_PORT = "6379"
@@ -116,6 +120,8 @@ class DevConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = True
+    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
+                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "redis"
     CACHE_REDIS_HOST = "127.0.0.1"
     CACHE_REDIS_PORT = "6379"
@@ -135,7 +141,7 @@ class DevConfig(Config):
         },
     }
     SERVER_NAME = "0.0.0.0:3000"
-    PREFERRED_URL_SCHEME = "http"
+    PREFERRED_URL_SCHEME = "https"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     SALT_SECRET = "email_confirmation_secret"
     SMTP_FROM = "MicroBlog"

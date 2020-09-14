@@ -41,7 +41,10 @@
                 {% endif %}
                 {{ form.about(class_='form-control') }}
             </div>
+            <div class="custom-control custom-switch">
+                    {{ form.subscription.label(class_='custom-control-label', for_='subsciptionSwitch') }}
+                    {{ form.subscription(class_='custom-control-input', type_='checkbox', id_='subsciptionSwitch') }}
+            </div>
             <input class="btn btn-success" type="submit" value="{{ _('Save') }}" style="background-color: #7eb428; border-color: #7eb428">
-
         </form>
 {% endblock %}
