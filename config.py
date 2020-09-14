@@ -41,6 +41,8 @@ class ProdConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = False
+    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
+                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "redis"
     CACHE_REDIS_HOST = "redis"
     CACHE_REDIS_PORT = "6379"
@@ -79,6 +81,8 @@ class HerokuConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = False
+    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
+                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "null"
     # CACHE_REDIS_HOST = "redis"
     # CACHE_REDIS_PORT = "6379"
@@ -116,6 +120,8 @@ class DevConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = True
+    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
+                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "redis"
     CACHE_REDIS_HOST = "127.0.0.1"
     CACHE_REDIS_PORT = "6379"

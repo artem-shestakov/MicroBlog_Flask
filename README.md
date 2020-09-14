@@ -1,19 +1,5 @@
 # MicroBlog by Flask
 
-## Init or change project
-### Create all tables in DB
-```sh
-$ export FLASK_APP=manage.py
-$ flask shell
->>> db.create_all()
-```
-### Migrate DataBase schema
-```shell script
-$ export FLASK_APP=main.py
-$ flask db migrate
-$ flask db upgrade
-```
-
 ## Deploy
 ### Heroku
 Create app on Heroku:
@@ -49,4 +35,31 @@ remote:
 remote: Verifying deploy... done.
 To https://git.heroku.com/rocky-brushlands-98089.git
  * [new branch]      master -> master
+```
+## Init or change project
+### Create all tables in DB
+```shell script
+$ flask init database
+
+All tables has been created
+Role 'user' has been added
+Role 'administrator' has been added
+```
+### Create blog administartor or user
+User 'create user' command. If set -a flag user will superuser right. 
+```shell script
+flask create user -a
+
+User's email address: administrator@microblog.local              
+User's first name: Administrator
+Enter password: 
+Repeat for confirmation: 
+User administrator@microblog.local added.
+```
+
+### Migrate DataBase schema
+```shell script
+$ export FLASK_APP=run.py
+$ flask db migrate
+$ flask db upgrade
 ```
