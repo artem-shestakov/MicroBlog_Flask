@@ -43,6 +43,7 @@ $ flask init database
 
 All tables has been created
 Role 'user' has been added
+Role 'author' has been added
 Role 'administrator' has been added
 ```
 ### Create blog administartor or user
@@ -63,3 +64,8 @@ $ export FLASK_APP=run.py
 $ flask db migrate
 $ flask db upgrade
 ```
+
+## Capabilities
+### OAuth Sign Up/Sign In
+
+![OAuth Sign Up/Sign In](readme_images/OAuth.gif)

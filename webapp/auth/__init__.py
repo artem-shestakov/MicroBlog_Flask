@@ -159,7 +159,8 @@ def logged_in(blueprint, token):
         account_type = "gitlab"
     user = User.query.filter_by(email=email).first()
     if not user:
-        user = User(email=email, f_name=f_name, account_type=account_type)
+        user = User(email=email, f_name=f_name)
+        user.account_type = account_type
         try:
             db.session.add(user)
             db.session.commit()
