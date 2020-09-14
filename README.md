@@ -10,11 +10,11 @@ https://rocky-brushlands-98089.herokuapp.com/ | https://git.heroku.com/rocky-bru
 ```
 Go to Heroku -> Your app -> Installed add-ons. Select your PostgreSQL add-on and copy Database Credentials from settings page. Write it on config.py file.
 
-![Heroku Database Credentials](https://i.ibb.co/8xt4QVB/Heroku-Database-Credentials.png)
+![Heroku Database Credentials](readme_images/Heroku_PSQL.png)
 
 Add CloudAMQP add-on. Go to Heroku -> Your app -> Installed add-ons. Select your CloudAMQP add-on and copy Database Credentials from detail page. Write it on config.py file.
 
-![Herolu CloudAMQP](https://i.ibb.co/fNkjS2F/Heroku-AMQP.png)
+![Herolu CloudAMQP](readme_images/Heroku_AMQP.png)
 
 Deploy your code to Heroku git:
 ```shell script
@@ -67,5 +67,4 @@ $ flask db upgrade
 
 ## Capabilities
 ### OAuth Sign Up/Sign In
-
 ![OAuth Sign Up/Sign In](readme_images/OAuth.gif)
