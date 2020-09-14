@@ -34,6 +34,9 @@ os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
 class Config(object):
     POSTS_PER_PAGE = 10
+    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
+                 {"name": "author", "description": "Microblog's post author."},
+                 {"name": "administrator", "description": "Microblog's superuser."}]
 
 
 class ProdConfig(Config):
@@ -41,8 +44,6 @@ class ProdConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = False
-    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
-                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "redis"
     CACHE_REDIS_HOST = "redis"
     CACHE_REDIS_PORT = "6379"
@@ -81,8 +82,6 @@ class HerokuConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = False
-    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
-                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "null"
     # CACHE_REDIS_HOST = "redis"
     # CACHE_REDIS_PORT = "6379"
@@ -120,8 +119,6 @@ class DevConfig(Config):
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     ASSETS_DEBUG = True
-    USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
-                  {"name": "administrator", "description": "Microblog's superuser."}]
     CACHE_TYPE = "redis"
     CACHE_REDIS_HOST = "127.0.0.1"
     CACHE_REDIS_PORT = "6379"
@@ -136,8 +133,7 @@ class DevConfig(Config):
     CELERYBEAT_SCHEDULE = {
         'weekly-digest': {
             'task': 'webapp.posts.tasks.week_digest_sender',
-            # 'schedule': crontab(day_of_week='monday', hour=7, minute=00)
-            'schedule': crontab(minute='*/3')
+            'schedule': crontab(day_of_week='monday', hour=7, minute=00)
         },
     }
     SERVER_NAME = "0.0.0.0:3000"
