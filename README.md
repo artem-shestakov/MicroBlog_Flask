@@ -68,3 +68,17 @@ $ flask db upgrade
 ## Capabilities
 ### OAuth Sign Up/Sign In
 ![OAuth Sign Up/Sign In](readme_images/OAuth.gif)
+
+### Email confirmation
+After registration, user will get greeting email with email confirmation URL.
+![Email confirmation](readme_images/Email_confirmation.png)
+
+### Profile page
+User can change profile
+![Profile](readme_images/Profile.png)
+or change password
+![Change password](readme_images/Password_change.png)
+
+### Administrator can block user
+Blocked user can not sign in but get information message about blocking.
+![User blocked](readme_images/Blocked_account.png)
