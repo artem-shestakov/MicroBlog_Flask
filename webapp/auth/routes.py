@@ -59,7 +59,10 @@ def login():
     if form.validate_on_submit():
         user = find_user(email=form.email.data)
         login_user(user, remember=form.remember_me.data)
-        flash(_("You have been logged successfully"), category="success")
+        if not user.blocked:
+            flash(_("You have been logged successfully"), category="success")
+        else:
+            flash(_("Your account is blocked. Please contact with technical support."), category="danger")
         return redirect(url_for("main.home", page=1))
     return render_template("login.html", form=form)
 
