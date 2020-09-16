@@ -28,6 +28,7 @@ class User(db.Model):
     email_confirm = db.Column(db.Boolean(), nullable=False, default=False)
     email_confirm_on = db.Column(db.DateTime())
     subscription = db.Column(db.Boolean(), nullable=False, default=False)
+    blocked = db.Column(db.Boolean(), nullable=False, default=False)
     posts = db.relationship("Post", backref="users", lazy="dynamic")
     roles = db.relationship("Role", secondary=roles, backref=db.backref("users", lazy="dynamic"))
 
@@ -55,6 +56,8 @@ class User(db.Model):
 
     @property
     def is_active(self):
+        if self.blocked:
+            return False
         return True
 
     @property
