@@ -65,12 +65,13 @@ def get_post(post_id):
         return redirect(url_for('posts.get_post', post_id=post_id))
 
     post = Post.query.get_or_404(post_id)
+    author = User.query.filter_by(id=post.user_id).one()
     tags = post.tags
     comments = post.comments.order_by(Comment.date.desc()).all()
     recent, top_tags = sidebar_data()
 
     return render_template('post.html', post=post, tags=tags, comments=comments, recent=recent, top_tags=top_tags,
-                           form=form)
+                           author=author, form=form)
 
 
 @posts_blueprint.route("/new", methods=("GET", "POST"))
@@ -128,10 +129,10 @@ def posts_by_tag(tag_title):
     )
 
 
-@posts_blueprint.route('/user/<string:username>')
+@posts_blueprint.route('/user/<string:email>')
 @cache.cached(timeout=60, key_prefix=make_chache_key)
-def posts_by_user(username):
-    user = User.query.filter_by(username=username).first_or_404()
+def posts_by_user(email):
+    user = User.query.filter_by(email=email).first_or_404()
     posts = user.posts.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
 
