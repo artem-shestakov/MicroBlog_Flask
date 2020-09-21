@@ -82,3 +82,7 @@ or change password
 ### Administrator can block user
 Blocked user can not sign in but get information message about blocking.
 ![User blocked](readme_images/Blocked_account.png)
+
+### Posts
+## Author, Publish date and tags
+![Author_publish_date_tags](readme_images/tags.png)

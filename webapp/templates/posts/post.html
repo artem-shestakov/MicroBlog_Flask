@@ -5,9 +5,18 @@
 {% block leftbody %}
 <div class="row">
     <div class="col">
-        <div class="row">
-            <h1>{{ post.title }}</h1>
-        </div>
+            <h1><b>{{ post.title }}</b></h1>
+        <span>
+            {{ _('by ') }}
+            <a class="text-reset" href="{{ url_for('posts.posts_by_user', email=author.email) }}">{{ author.f_name }} {{ author.l_name }}</a>
+             <i class="fa fa-clock-o" aria-hidden="true"></i>
+            {{ post.publish_date.strftime('%Y, %b %d') }}
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            {% for tag in tags %}
+                <a class="badge badge-secondary my-3" href="{{ url_for('posts.posts_by_tag', tag_title=tag.title) }} ">#{{ tag.title }}</a>
+            {% endfor %}
+        </span>
+        <hr>
         {% if post.youtube_id %}
             <div class="row">
                 <div class="col">
