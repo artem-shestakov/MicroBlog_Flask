@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_celery import Celery
@@ -24,6 +24,23 @@ def create_app(config_object):
 
     app = Flask(__name__)
     app.config.from_object(config_object)
+
+    # Errors handlers
+    @app.errorhandler(403)
+    def page_not_found(error):
+        """ Return error 403 """
+        return render_template('403.html'), 403
+
+    # Error handlers
+    @app.errorhandler(404)
+    def page_not_found(error):
+        """ Return error 404 """
+        return render_template('404.html'), 404
+
+    @app.errorhandler(500)
+    def page_not_found(error):
+        """ Return error 500 """
+        return render_template('500.html'), 500
 
     db.init_app(app)
     migrate.init_app(app, db)

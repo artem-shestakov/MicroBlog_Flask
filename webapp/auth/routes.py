@@ -36,20 +36,6 @@ auth_blueprint = Blueprint(
 )
 
 
-# Base 404 handler
-@auth_blueprint.app_errorhandler(404)
-def page_not_found(error):
-    """ Return error 404 """
-    return render_template('404.html'), 404
-
-
-# Base 500 handler
-@auth_blueprint.app_errorhandler(500)
-def app_error(error):
-    """ Return error 500 """
-    return render_template('500.html'), 500
-
-
 # Route to login form
 @auth_blueprint.route("/login", methods=('GET', "POST"))
 def login():
