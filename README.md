@@ -65,7 +65,8 @@ $ flask db migrate
 $ flask db upgrade
 ```
 
-## Capabilities
+# Capabilities
+## Authentication and users
 ### OAuth Sign Up/Sign In
 ![OAuth Sign Up/Sign In](readme_images/OAuth.gif)
 
@@ -83,6 +84,6 @@ or change password
 Blocked user can not sign in but get information message about blocking.
 ![User blocked](readme_images/Blocked_account.png)
 
-### Posts
-## Author, Publish date and tags
+## Posts
+### Author, Publish date and tags
 ![Author_publish_date_tags](readme_images/tags.png)

@@ -1,14 +1,30 @@
-{% extends 'base.html' %}
-
-{% block title %}
-{{ title }}
-{% endblock %}
-
-{% block leftbody %}
-<div class="row">
-    <div class="col">
-        <h4>{{ _('ERROR 500') }}</h4>
-        <h1>{{ _('Oops, we have some error (:') }}</h1>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/style.css') }}">
+    <title>_(404 Page Error)</title>
+</head>
+<body>
+<div id="container">
+    <div class="content">
+        <h2>500</h2>
+        <h4>{{ _('Oops! Something went wrong!')}}</h4>
+        <p>{{ _('We are having troubles with this page but we will fix everything soon') }}</p>
+        <a href="{{ url_for('main.home', page=1) }}">{{ _('Back to Home') }}</a>
     </div>
 </div>
-{% endblock %}
+<script>
+    let container = document.getElementById('container');
+    window.onmousemove = function (e) {
+        let x = - e.clientX/5;
+        let y = - e.clientY/5;
+        container.style.backgroundPositionX = x + 'px';
+        container.style.backgroundPositionY = y + 'px';
+    }
+</script>
+</body>
+</html>

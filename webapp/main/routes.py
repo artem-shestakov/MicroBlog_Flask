@@ -12,20 +12,6 @@ main_blueprint = Blueprint(
 )
 
 
-# Base 404 handler
-@main_blueprint.app_errorhandler(404)
-def page_not_found(error):
-    """ Return error 404 html page"""
-    return render_template("404.html", title="Page Not Found"), 404
-
-
-# 500 error handler
-@main_blueprint.app_errorhandler(500)
-def page_not_found(error):
-    """ Return error 500 html page"""
-    return render_template("500.html", title="Error 500"), 500
-
-
 # Route to index page or page with number "page", by default 1
 @main_blueprint.route("/")
 @main_blueprint.route("/<int:page>")
