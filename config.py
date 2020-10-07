@@ -33,6 +33,8 @@ os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
 
 class Config(object):
+    NAME = 'MicroBlog server'
+    UPLOAD_FOLDER = '/static/avatars/'
     POSTS_PER_PAGE = 10
     USER_ROLES = [{"name": "user", "description": "Microblog's user. Read only rights."},
                  {"name": "author", "description": "Microblog's post author."},
@@ -136,7 +138,7 @@ class DevConfig(Config):
             'schedule': crontab(day_of_week='monday', hour=7, minute=00)
         },
     }
-    SERVER_NAME = "0.0.0.0:3000"
+    # SERVER_NAME = "0.0.0.0:3000"
     PREFERRED_URL_SCHEME = "http"
     SECRET_KEY = b'\xe5LpK!\xa4\x99\x92G\xd1T\x82\xdfR\x0c\xb6\x95\xbd\x1c\xab\x19\x94\xc87'
     SALT_SECRET = "email_confirmation_secret"

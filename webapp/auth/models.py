@@ -24,6 +24,7 @@ class User(db.Model):
     l_name = db.Column(db.String(255))
     password = db.Column(db.String(255))
     about = db.Column(db.Text())
+    avatar = db.Column(db.String(255))
     account_type = db.Column(db.String(25), nullable=False, default="local")
     email_confirm = db.Column(db.Boolean(), nullable=False, default=False)
     email_confirm_on = db.Column(db.DateTime())
