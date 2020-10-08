@@ -22,4 +22,4 @@ celerybeat-schedule.db
 *.log
 
 # Images
-webapp/static/avatars/*.png
+webapp/static/avatars/*
