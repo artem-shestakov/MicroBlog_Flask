@@ -3,6 +3,7 @@ from flask_restful import Resource, marshal_with
 from werkzeug.utils import secure_filename
 from webapp.utils.response import response_with
 import webapp.utils.response_code as response_code
+from webapp.utils.upload import allowed_image
 from webapp import db
 import os
 from .parser import avatar_post_parser
@@ -35,7 +36,7 @@ class AvatarApi(Resource):
         args = avatar_post_parser.parse_args()
         file = args['image']
         user = User.query.get(user_id)
-        if file:
+        if file and allowed_image(file):
             filename = secure_filename(file.filename)
             filename = str(user.id) + os.path.splitext(filename)[1]
             user.avatar = filename
