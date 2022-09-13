@@ -32,7 +32,7 @@ Flask-OpenID==1.2.5
 Flask-RESTful==0.3.8
 Flask-SQLAlchemy==2.4.3
 Flask-WTF==0.14.3
-flower==0.9.5
+flower==1.2.0
 gevent==20.6.2
 greenlet==0.4.16
 humanize==2.5.0
